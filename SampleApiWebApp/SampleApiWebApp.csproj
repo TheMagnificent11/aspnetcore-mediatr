@@ -19,10 +19,10 @@
     <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.1">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2">
       <ExcludeAssets>all</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>none</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.3" />
