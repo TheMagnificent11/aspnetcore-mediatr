@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SampleApiWebApp.Constants;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SampleApiWebApp
@@ -81,24 +83,13 @@ namespace SampleApiWebApp
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(
-                    CorsPlolicyName,
-                    policy =>
-                        policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
-            });
+            ConfigureCors(services);
 
             services.AddDbContextPool<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = ApiName, Version = "v1" });
-            });
+            ConfigureProblemDetails(services);
+            ConfigureSwagger(services);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -116,6 +107,49 @@ namespace SampleApiWebApp
                 .As(typeof(IEntityRepository<,>));
 
             return new AutofacServiceProvider(builder.Build());
+        }
+
+        private static void ConfigureCors(IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    CorsPlolicyName,
+                    policy =>
+                        policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+        }
+
+        private static void ConfigureProblemDetails(IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var problemDetails = new ValidationProblemDetails(context.ModelState)
+                    {
+                        Instance = context.HttpContext.Request.Path,
+                        Status = (int)HttpStatusCode.BadRequest,
+                        Detail = "Please refer to the errors property for additional details"
+                    };
+
+                    return new BadRequestObjectResult(problemDetails)
+                    {
+                        ContentTypes = { ContentTypes.ApplicationJson }
+                    };
+                };
+            });
+        }
+
+        private static void ConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = ApiName, Version = "v1" });
+            });
         }
 
         private static void ConfigureMediatr(IServiceCollection services)

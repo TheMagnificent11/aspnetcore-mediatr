@@ -12,7 +12,7 @@ namespace SampleApiWebApp.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class PlayersController : Controller
+    public sealed class PlayersController : Controller
     {
     }
 }
