@@ -8,25 +8,23 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Get One Handler
+    /// Post Request Handler
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
-    /// <typeparam name="TRequest">Request type</typeparam>
-    /// <typeparam name="TResponseEntity">Entity response type</typeparam>
-    public class GetOneHandler<TId, TEntity, TRequest, TResponseEntity> :
-        IRequestHandler<TRequest, OperationResult<TResponseEntity>>
+    /// <typeparam name="TRequest">Post request type</typeparam>
+    public class PostRequestHandler<TId, TEntity, TRequest> :
+        IRequestHandler<TRequest, OperationResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
-        where TRequest : class, IGetOneRequest<TId, TResponseEntity>
-        where TResponseEntity : class
+        where TRequest : class, IPostRequest<TId>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetOneHandler{TId, TEntity, TRequest, TResponseEntity}"/> class
+        /// Initializes a new instance of the <see cref="PostRequestHandler{TId, TEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
         /// <param name="mappingProvider">Mapping provider</param>
-        public GetOneHandler(
+        public PostRequestHandler(
             IEntityRepository<TEntity, TId> repository,
             IMapper mappingProvider)
         {
@@ -45,26 +43,25 @@ namespace RequestManagement
         protected IMapper Mapper { get; }
 
         /// <summary>
-        /// Handles get one entity requests
+        /// Handles post requests
         /// </summary>
-        /// <param name="request">Request</param>
-        /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="request">Post request</param>
+        /// <param name="cancellationToken">Canellation token</param>
         /// <returns>
-        /// Operation result containing the response entity as the data if successful,
-        /// otherwise not found operation result
+        /// Operation result containing the ID of the created entity if successful,
+        /// otherwise bad request operation result containing errors collection
         /// </returns>
-        public async Task<OperationResult<TResponseEntity>> Handle(
+        public async Task<OperationResult<TId>> Handle(
             TRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var entity = await Repository.RetrieveById(request.Id);
-            if (entity == null) return OperationResult.NotFound<TResponseEntity>();
+            var entity = Mapper.Map<TEntity>(request);
 
-            var result = Mapper.Map<TResponseEntity>(entity);
+            await Repository.Create(entity);
 
-            return OperationResult.Success(result);
+            return OperationResult.Success(entity.Id);
         }
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Get One Entity Request
+    /// Get One Entity Request Interface
     /// </summary>
     /// <typeparam name="TId">Entity ID type</typeparam>
     /// <typeparam name="TResponseEntity">Reponse entity type</typeparam>
