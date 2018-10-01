@@ -21,6 +21,9 @@ namespace SampleApiWebApp.DataConfiguration
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.HasIndex(i => i.Name)
+                .IsUnique();
+
             builder.HasMany(i => i.Players)
                 .WithOne(i => i.Team)
                 .OnDelete(DeleteBehavior.Restrict)

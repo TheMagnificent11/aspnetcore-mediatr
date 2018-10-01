@@ -19,11 +19,11 @@ namespace SampleApiWebApp.DataConfiguration
 
             builder.Property(i => i.GivenName)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(Player.NameMaxLength);
 
             builder.Property(i => i.Surname)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(Player.NameMaxLength);
 
             builder.HasOne(i => i.Team)
                 .WithMany(i => i.Players)

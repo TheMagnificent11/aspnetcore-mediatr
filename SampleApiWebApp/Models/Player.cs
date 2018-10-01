@@ -1,17 +1,16 @@
-﻿using EntityManagement;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SampleApiWebApp.Domain
+namespace SampleApiWebApp.Models
 {
     /// <summary>
     /// Player
     /// </summary>
-    public class Player : IEntity<long>
+    public class Player
     {
-        /// <summary>
-        /// Name max length
-        /// </summary>
-        public const int NameMaxLength = 50;
-
         /// <summary>
         /// Gets or sets the ID
         /// </summary>
@@ -31,11 +30,6 @@ namespace SampleApiWebApp.Domain
         /// Gets or sets the team ID
         /// </summary>
         public long TeamId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the team
-        /// </summary>
-        public Team Team { get; set; }
 
         /// <summary>
         /// Gets or sets the squad number

@@ -1,30 +1,27 @@
-﻿using EntityManagement;
+﻿using System.ComponentModel.DataAnnotations;
+using RequestManagement;
 
-namespace SampleApiWebApp.Domain
+namespace SampleApiWebApp.Models
 {
     /// <summary>
-    /// Player
+    /// Create Player Request
     /// </summary>
-    public class Player : IEntity<long>
+    public class CreatePlayerRequest : IPostRequest<long>
     {
-        /// <summary>
-        /// Name max length
-        /// </summary>
-        public const int NameMaxLength = 50;
-
-        /// <summary>
-        /// Gets or sets the ID
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Gets or sets the given name
         /// </summary>
+        [Required]
+        [Display(Name = "Given Name")]
+        [MaxLength(Domain.Player.NameMaxLength)]
         public string GivenName { get; set; }
 
         /// <summary>
         /// Gets or sets the surname
         /// </summary>
+        [Required]
+        [Display(Name = "Surname")]
+        [MaxLength(Domain.Player.NameMaxLength)]
         public string Surname { get; set; }
 
         /// <summary>
@@ -33,13 +30,9 @@ namespace SampleApiWebApp.Domain
         public long TeamId { get; set; }
 
         /// <summary>
-        /// Gets or sets the team
-        /// </summary>
-        public Team Team { get; set; }
-
-        /// <summary>
         /// Gets or sets the squad number
         /// </summary>
+        [Range(0, 99)]
         public int SquadNumber { get; set; }
     }
 }
