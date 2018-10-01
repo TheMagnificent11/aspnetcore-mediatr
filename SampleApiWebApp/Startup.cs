@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RequestManagement;
 using SampleApiWebApp.Constants;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -99,12 +100,8 @@ namespace SampleApiWebApp
             var builder = new ContainerBuilder();
             builder.Populate(services);
 
-            builder.RegisterType<DatabaseContext>()
-                .As<IDatabaseContext>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterGeneric(typeof(EntityRepository<,>))
-                .As(typeof(IEntityRepository<,>));
+            RegisterDataAccessTypes(builder);
+            ////RegisterMediatrHandlers(builder);
 
             return new AutofacServiceProvider(builder.Build());
         }
@@ -156,7 +153,8 @@ namespace SampleApiWebApp
         {
             var assemblies = new[]
             {
-                typeof(Startup).Assembly
+                typeof(Startup).Assembly,
+                typeof(OperationResult).Assembly
             };
 
             services.AddMediatR(assemblies);
@@ -169,6 +167,30 @@ namespace SampleApiWebApp
                 var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
                 context.Database.Migrate();
             }
+        }
+
+        private static void RegisterDataAccessTypes(ContainerBuilder builder)
+        {
+            builder.RegisterType<DatabaseContext>()
+                .As<IDatabaseContext>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterGeneric(typeof(EntityRepository<,>))
+                .As(typeof(IEntityRepository<,>));
+        }
+
+        private static void RegisterMediatrHandlers(ContainerBuilder builder)
+        {
+            /*
+            builder.RegisterType<PostRequestHandler<long, Domain.Team, Models.CreateTeamRequest>>()
+                .As<IRequestHandler<Models.CreateTeamRequest, OperationResult<long>>>();
+            */
+
+            builder.RegisterGeneric(typeof(PostRequestHandler<,,>))
+                .AsImplementedInterfaces();
+
+            builder.RegisterGeneric(typeof(GetOneHandler<,,,>))
+                .AsImplementedInterfaces();
         }
     }
 }
