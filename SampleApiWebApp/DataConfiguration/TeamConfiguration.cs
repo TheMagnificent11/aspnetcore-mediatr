@@ -19,7 +19,7 @@ namespace SampleApiWebApp.DataConfiguration
 
             builder.Property(i => i.Name)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(Team.NameMaxLength);
 
             builder.HasIndex(i => i.Name)
                 .IsUnique();

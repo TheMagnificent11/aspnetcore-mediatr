@@ -13,7 +13,7 @@ namespace SampleApiWebApp.Models
         /// </summary>
         [Required]
         [Display(Name = "Name")]
-        [MaxLength(0)]
+        [MaxLength(Domain.Team.NameMaxLength)]
         public string Name { get; set; }
     }
 }

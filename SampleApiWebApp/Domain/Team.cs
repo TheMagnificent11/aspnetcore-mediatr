@@ -9,6 +9,11 @@ namespace SampleApiWebApp.Domain
     public class Team : IEntity<long>
     {
         /// <summary>
+        /// Name max length
+        /// </summary>
+        public const int NameMaxLength = 50;
+
+        /// <summary>
         /// Gets or sets the ID
         /// </summary>
         public long Id { get; set; }
