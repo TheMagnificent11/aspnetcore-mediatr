@@ -6,7 +6,7 @@ namespace SampleApiWebApp.Models
     /// <summary>
     /// Create Player Request
     /// </summary>
-    public class CreatePlayerRequest : IPostRequest<long>
+    public class CreatePlayerRequest : IPostRequest<long, Player>
     {
         /// <summary>
         /// Gets or sets the given name

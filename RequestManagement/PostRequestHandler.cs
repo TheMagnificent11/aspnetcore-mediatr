@@ -12,15 +12,17 @@ namespace RequestManagement
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
+    /// <typeparam name="TRequestEntity">Request entity type</typeparam>
     /// <typeparam name="TRequest">Post request type</typeparam>
-    public class PostRequestHandler<TId, TEntity, TRequest> :
+    public class PostRequestHandler<TId, TEntity, TRequestEntity, TRequest> :
         IRequestHandler<TRequest, OperationResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
-        where TRequest : class, IPostRequest<TId>
+        where TRequestEntity : class
+        where TRequest : class, IPostRequest<TId, TRequestEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostRequestHandler{TId, TEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="PostRequestHandler{TId, TEntity, TRequestEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
         /// <param name="mappingProvider">Mapping provider</param>

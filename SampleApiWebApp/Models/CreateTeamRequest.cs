@@ -6,7 +6,7 @@ namespace SampleApiWebApp.Models
     /// <summary>
     /// Create Team Request
     /// </summary>
-    public class CreateTeamRequest : IPostRequest<long>
+    public class CreateTeamRequest : IPostRequest<long, Team>
     {
         /// <summary>
         /// Gets or sets the name

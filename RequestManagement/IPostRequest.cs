@@ -7,8 +7,10 @@ namespace RequestManagement
     /// Post Request Interface
     /// </summary>
     /// <typeparam name="TId">ID type of entity being created</typeparam>
-    public interface IPostRequest<TId> : IRequest<OperationResult<TId>>
+    /// <typeparam name="TRequestEntity">Request entity type</typeparam>
+    public interface IPostRequest<TId, TRequestEntity> : IRequest<OperationResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TRequestEntity : class
     {
     }
 }

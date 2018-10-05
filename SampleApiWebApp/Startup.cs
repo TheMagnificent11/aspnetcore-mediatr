@@ -1,10 +1,13 @@
 using System;
 using System.Net;
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Features.Variance;
 using AutoMapper;
 using EntityManagement;
 using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -95,13 +98,14 @@ namespace SampleApiWebApp
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddAutoMapper();
-            ConfigureMediatr(services);
+            ////ConfigureMediatr(services);
 
             var builder = new ContainerBuilder();
+            builder.RegisterSource(new ContravariantRegistrationSource());
             builder.Populate(services);
 
             RegisterDataAccessTypes(builder);
-            ////RegisterMediatrHandlers(builder);
+            RegisterMediatrHandlers(builder);
 
             return new AutofacServiceProvider(builder.Build());
         }
@@ -181,16 +185,46 @@ namespace SampleApiWebApp
 
         private static void RegisterMediatrHandlers(ContainerBuilder builder)
         {
-            /*
-            builder.RegisterType<PostRequestHandler<long, Domain.Team, Models.CreateTeamRequest>>()
+            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
+                .AsImplementedInterfaces();
+
+            ////var mediatrOpenTypes = new[]
+            ////{
+            ////    typeof(IRequestHandler<,>),
+            ////    typeof(INotificationHandler<>),
+            ////};
+
+            ////var assemblies = new[]
+            ////{
+            ////    typeof(Startup).Assembly,
+            ////    typeof(OperationResult).Assembly
+            ////};
+
+            ////foreach (var assembly in assemblies)
+            ////{
+            ////    foreach (var mediatrOpenType in mediatrOpenTypes)
+            ////    {
+            ////        builder
+            ////            .RegisterAssemblyTypes(assembly)
+            ////            .AsClosedTypesOf(mediatrOpenType)
+            ////            .AsImplementedInterfaces();
+            ////    }
+            ////}
+
+            builder.RegisterType<PostRequestHandler<long, Domain.Team, Models.Team, Models.CreateTeamRequest>>()
                 .As<IRequestHandler<Models.CreateTeamRequest, OperationResult<long>>>();
-            */
 
-            builder.RegisterGeneric(typeof(PostRequestHandler<,,>))
-                .AsImplementedInterfaces();
+            builder.RegisterType<GetOneHandler<long, Domain.Team, Models.GetTeamRequest, Models.Team>>()
+                .As<IRequestHandler<Models.GetTeamRequest, OperationResult<Models.Team>>>();
 
-            builder.RegisterGeneric(typeof(GetOneHandler<,,,>))
-                .AsImplementedInterfaces();
+            ////builder.RegisterGeneric(typeof(PostRequestHandler<,,,>))
+            ////    .AsImplementedInterfaces();
+
+            ////builder.RegisterGeneric(typeof(GetOneHandler<,,,>))
+            ////    .AsImplementedInterfaces();
+
+            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         }
     }
 }
