@@ -20,18 +20,11 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace SampleApiWebApp
 {
-    /// <summary>
-    /// Startup
-    /// </summary>
     public sealed class Startup
     {
         private const string ApiName = "Sample API";
         private const string CorsPlolicyName = "CorsPolicy";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class
-        /// </summary>
-        /// <param name="configuration">Application configuration</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,11 +32,6 @@ namespace SampleApiWebApp
 
         private IConfiguration Configuration { get; set; }
 
-        /// <summary>
-        /// Configures the HTTP request pipeline
-        /// </summary>
-        /// <param name="app">Application builder</param>
-        /// <param name="env">Hosting environment</param>
         public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
@@ -78,11 +66,6 @@ namespace SampleApiWebApp
             Migrate(app);
         }
 
-        /// <summary>
-        /// Configures application services
-        /// </summary>
-        /// <param name="services">Services collection</param>
-        /// <returns>Service provider</returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));

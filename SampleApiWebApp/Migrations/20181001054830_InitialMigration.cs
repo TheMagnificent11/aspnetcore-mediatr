@@ -3,15 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SampleApiWebApp.Migrations
 {
-    /// <summary>
-    /// Initial Migration
-    /// </summary>
     public partial class InitialMigration : Migration
     {
-        /// <summary>
-        /// Builds the operations that will migrate the database 'up'
-        /// </summary>
-        /// <param name="migrationBuilder">Migration builder</param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(

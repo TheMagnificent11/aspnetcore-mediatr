@@ -4,8 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <OutputPath>bin</OutputPath>
-    <DocumentationFile>bin\EntityManagment.xml</DocumentationFile>
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <NoWarn>1701;1702;1705;</NoWarn>
     <LangVersion>7.3</LangVersion>

@@ -4,15 +4,8 @@ using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.DataConfiguration
 {
-    /// <summary>
-    /// Player Configuration
-    /// </summary>
     public class PlayerConfiguration : IEntityTypeConfiguration<Player>
     {
-        /// <summary>
-        /// Configures the player entity
-        /// </summary>
-        /// <param name="builder">The builder to be used to configure the player entity</param>
         public void Configure(EntityTypeBuilder<Player> builder)
         {
             builder.HasKey(i => i.Id);

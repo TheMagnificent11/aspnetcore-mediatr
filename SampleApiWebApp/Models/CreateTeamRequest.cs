@@ -3,14 +3,8 @@ using RequestManagement;
 
 namespace SampleApiWebApp.Models
 {
-    /// <summary>
-    /// Create Team Request
-    /// </summary>
     public class CreateTeamRequest : IPostRequest<long, Team>
     {
-        /// <summary>
-        /// Gets or sets the name
-        /// </summary>
         [Required]
         [Display(Name = "Name")]
         [MaxLength(Domain.Team.NameMaxLength)]

@@ -3,15 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace SampleApiWebApp
 {
-    /// <summary>
-    /// Application Program
-    /// </summary>
     public static class Program
     {
-        /// <summary>
-        /// Main method
-        /// </summary>
-        /// <param name="args">Command-line arguments</param>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();

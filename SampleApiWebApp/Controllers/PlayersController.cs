@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SampleApiWebApp.Controllers
 {
-    /// <summary>
-    /// Players Controller
-    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public sealed class PlayersController : Controller

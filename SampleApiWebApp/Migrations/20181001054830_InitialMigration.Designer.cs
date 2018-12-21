@@ -12,10 +12,6 @@ namespace SampleApiWebApp.Migrations
     [Migration("20181001054830_InitialMigration")]
     partial class InitialMigration
     {
-        /// <summary>
-        /// Builds the target model
-        /// </summary>
-        /// <param name="modelBuilder">Model builder</param>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

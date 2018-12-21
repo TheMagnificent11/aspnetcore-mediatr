@@ -9,9 +9,6 @@ using SampleApiWebApp.Models;
 
 namespace SampleApiWebApp.Controllers
 {
-    /// <summary>
-    /// Teams Controller
-    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public sealed class TeamsController : Controller
