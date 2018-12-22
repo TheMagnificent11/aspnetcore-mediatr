@@ -70,18 +70,17 @@ namespace SampleApiWebApp
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            ConfigureCors(services);
-
             services.AddDbContextPool<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            ConfigureProblemDetails(services);
-            ConfigureSwagger(services);
+            ConfigureCors(services);
+
+            services.AddAutoMapper();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAutoMapper();
-            ////ConfigureMediatr(services);
+            ConfigureProblemDetails(services);
+            ConfigureSwagger(services);
 
             var builder = new ContainerBuilder();
             builder.RegisterSource(new ContravariantRegistrationSource());
@@ -136,17 +135,6 @@ namespace SampleApiWebApp
             });
         }
 
-        private static void ConfigureMediatr(IServiceCollection services)
-        {
-            var assemblies = new[]
-            {
-                typeof(Startup).Assembly,
-                typeof(OperationResult).Assembly
-            };
-
-            services.AddMediatR(assemblies);
-        }
-
         private static void Migrate(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -171,40 +159,28 @@ namespace SampleApiWebApp
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
                 .AsImplementedInterfaces();
 
-            ////var mediatrOpenTypes = new[]
-            ////{
-            ////    typeof(IRequestHandler<,>),
-            ////    typeof(INotificationHandler<>),
-            ////};
+            var mediatrOpenTypes = new[]
+            {
+                typeof(IRequestHandler<,>),
+                typeof(INotificationHandler<>),
+            };
 
-            ////var assemblies = new[]
-            ////{
-            ////    typeof(Startup).Assembly,
-            ////    typeof(OperationResult).Assembly
-            ////};
+            var assemblies = new[]
+            {
+                typeof(Startup).Assembly,
+                typeof(OperationResult).Assembly
+            };
 
-            ////foreach (var assembly in assemblies)
-            ////{
-            ////    foreach (var mediatrOpenType in mediatrOpenTypes)
-            ////    {
-            ////        builder
-            ////            .RegisterAssemblyTypes(assembly)
-            ////            .AsClosedTypesOf(mediatrOpenType)
-            ////            .AsImplementedInterfaces();
-            ////    }
-            ////}
-
-            builder.RegisterType<PostRequestHandler<long, Domain.Team, Models.Team, Models.CreateTeamRequest>>()
-                .As<IRequestHandler<Models.CreateTeamRequest, OperationResult<long>>>();
-
-            builder.RegisterType<GetOneHandler<long, Domain.Team, Models.GetTeamRequest, Models.Team>>()
-                .As<IRequestHandler<Models.GetTeamRequest, OperationResult<Models.Team>>>();
-
-            ////builder.RegisterGeneric(typeof(PostRequestHandler<,,,>))
-            ////    .AsImplementedInterfaces();
-
-            ////builder.RegisterGeneric(typeof(GetOneHandler<,,,>))
-            ////    .AsImplementedInterfaces();
+            foreach (var assembly in assemblies)
+            {
+                foreach (var mediatrOpenType in mediatrOpenTypes)
+                {
+                    builder
+                        .RegisterAssemblyTypes(assembly)
+                        .AsClosedTypesOf(mediatrOpenType)
+                        .AsImplementedInterfaces();
+                }
+            }
 
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));

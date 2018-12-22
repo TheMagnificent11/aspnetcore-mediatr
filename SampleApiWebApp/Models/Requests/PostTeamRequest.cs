@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using RequestManagement;
 
-namespace SampleApiWebApp.Models
+namespace SampleApiWebApp.Models.Requests
 {
-    public class CreateTeamRequest : IPostRequest<long, Team>
+    public class PostTeamRequest : IPostRequest<long, Team>
     {
         [Required]
         [Display(Name = "Name")]

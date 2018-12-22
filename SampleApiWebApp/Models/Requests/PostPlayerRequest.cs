@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using RequestManagement;
 
-namespace SampleApiWebApp.Models
+namespace SampleApiWebApp.Models.Requests
 {
-    public class CreatePlayerRequest : IPostRequest<long, Player>
+    public class PostPlayerRequest : IPostRequest<long, Player>
     {
         [Required]
         [Display(Name = "Given Name")]

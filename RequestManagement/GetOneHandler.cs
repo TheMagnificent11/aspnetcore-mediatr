@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using EntityManagement;
 using MediatR;
 
@@ -12,37 +11,28 @@ namespace RequestManagement
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
-    /// <typeparam name="TRequest">Request type</typeparam>
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
-    public class GetOneHandler<TId, TEntity, TRequest, TResponseEntity> :
+    /// <typeparam name="TRequest">Request type</typeparam>
+    public abstract class GetOneHandler<TId, TEntity, TResponseEntity, TRequest> :
         IRequestHandler<TRequest, OperationResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
-        where TRequest : class, IGetOneRequest<TId, TResponseEntity>
         where TResponseEntity : class
+        where TRequest : class, IGetOneRequest<TId, TResponseEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetOneHandler{TId, TEntity, TRequest, TResponseEntity}"/> class
+        /// Initializes a new instance of the <see cref="GetOneHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        /// <param name="mappingProvider">Mapping provider</param>
-        public GetOneHandler(
-            IEntityRepository<TEntity, TId> repository,
-            IMapper mappingProvider)
+        public GetOneHandler(IEntityRepository<TEntity, TId> repository)
         {
             Repository = repository;
-            Mapper = mappingProvider;
         }
 
         /// <summary>
         /// Gets the entity repository
         /// </summary>
         protected IEntityRepository<TEntity, TId> Repository { get; }
-
-        /// <summary>
-        /// Gets the mapper
-        /// </summary>
-        protected IMapper Mapper { get; }
 
         /// <summary>
         /// Handles get one entity requests
@@ -62,9 +52,16 @@ namespace RequestManagement
             var entity = await Repository.RetrieveById(request.Id);
             if (entity == null) return OperationResult.NotFound<TResponseEntity>();
 
-            var result = Mapper.Map<TResponseEntity>(entity);
+            var result = GenerateResponseEntity(entity);
 
             return OperationResult.Success(result);
         }
+
+        /// <summary>
+        /// Generates a response entity from the domain entity
+        /// </summary>
+        /// <param name="entity">Domain entity</param>
+        /// <returns>Response entity</returns>
+        protected abstract TResponseEntity GenerateResponseEntity(TEntity entity);
     }
 }

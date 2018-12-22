@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement;
 using SampleApiWebApp.Constants;
-using SampleApiWebApp.Models;
+using SampleApiWebApp.Models.Requests;
 
 namespace SampleApiWebApp.Controllers
 {
@@ -39,7 +39,7 @@ namespace SampleApiWebApp.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<IActionResult> Post(
-            [FromBody]CreateTeamRequest request,
+            [FromBody]PostTeamRequest request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));

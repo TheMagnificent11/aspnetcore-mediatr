@@ -7,7 +7,7 @@ namespace SampleApiWebApp.Models.Mappings
         public TeamMappings()
         {
             CreateMap<Domain.Team, Team>();
-            CreateMap<CreateTeamRequest, Domain.Team>();
+            CreateMap<Requests.PostTeamRequest, Domain.Team>();
         }
     }
 }

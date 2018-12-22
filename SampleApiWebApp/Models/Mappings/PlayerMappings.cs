@@ -7,7 +7,7 @@ namespace SampleApiWebApp.Models.Mappings
         public PlayerMappings()
         {
             CreateMap<Domain.Player, Player>();
-            CreateMap<CreatePlayerRequest, Domain.Player>();
+            CreateMap<Requests.PostPlayerRequest, Domain.Player>();
         }
     }
 }
