@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
@@ -47,6 +49,12 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
+            var validationErrors = await ValidateRequest(request, cancellationToken);
+            if (validationErrors != null && validationErrors.Any())
+            {
+                return OperationResult.Fail<TId>(validationErrors);
+            }
+
             var entity = GenerateDomainEntity(request);
 
             await Repository.Create(entity);
@@ -60,5 +68,17 @@ namespace RequestManagement
         /// <param name="request">Create entity request</param>
         /// <returns>Entity to be created</returns>
         protected abstract TEntity GenerateDomainEntity(TRequest request);
+
+        /// <summary>
+        /// Validate the request
+        /// </summary>
+        /// <param name="request">Reqest to validate</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Dictionary of validation errors keyed by request field name</returns>
+        protected virtual Task<IDictionary<string, IEnumerable<string>>> ValidateRequest(TRequest request, CancellationToken cancellationToken)
+        {
+            IDictionary<string, IEnumerable<string>> validationErrors = new Dictionary<string, IEnumerable<string>>();
+            return Task.FromResult(validationErrors);
+        }
     }
 }
