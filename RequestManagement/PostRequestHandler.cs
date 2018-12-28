@@ -42,7 +42,7 @@ namespace RequestManagement
         /// <param name="request">Post request</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>
-        /// Operation result containing the ID of the created entity if successful,
+        /// An <see cref="OperationResult{T}"/> containing the ID of the created entity if successful,
         /// otherwise bad request operation result containing errors collection
         /// </returns>
         public async Task<OperationResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
@@ -50,10 +50,7 @@ namespace RequestManagement
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var validationErrors = await ValidateRequest(request, cancellationToken);
-            if (validationErrors != null && validationErrors.Any())
-            {
-                return OperationResult.Fail<TId>(validationErrors);
-            }
+            if (validationErrors != null && validationErrors.Any()) return OperationResult.Fail<TId>(validationErrors);
 
             var entity = GenerateDomainEntity(request);
 
