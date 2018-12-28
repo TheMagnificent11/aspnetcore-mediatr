@@ -50,5 +50,26 @@ namespace SampleApiWebApp.Controllers
 
             return result.ToActionResult();
         }
+
+        [HttpPut]
+        [Route("{id}")]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put(
+            [FromRoute]long id,
+            [FromBody]PutTeamRequest request,
+            CancellationToken cancellationToken)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            request.Id = id;
+
+            var result = await Mediator.Send(request, cancellationToken);
+
+            return result.ToActionResult();
+        }
     }
 }
