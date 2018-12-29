@@ -24,7 +24,7 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="GetOneHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        public GetOneHandler(IEntityRepository<TEntity, TId> repository)
+        protected GetOneHandler(IEntityRepository<TEntity, TId> repository)
         {
             Repository = repository;
         }

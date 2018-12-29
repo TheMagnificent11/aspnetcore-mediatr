@@ -26,7 +26,7 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="PostRequestHandler{TId, TEntity, TRequestEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        public PostRequestHandler(IEntityRepository<TEntity, TId> repository)
+        protected PostRequestHandler(IEntityRepository<TEntity, TId> repository)
         {
             Repository = repository;
         }
