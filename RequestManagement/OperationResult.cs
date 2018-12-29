@@ -168,6 +168,17 @@ namespace RequestManagement
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="OperationResult{T}"/> class
+        /// </summary>
+        /// <param name="errors">Errors</param>
+        internal OperationResult(IDictionary<string, IEnumerable<string>> errors)
+        {
+            Errors = errors;
+            IsSuccess = false;
+            Status = HttpStatusCode.BadRequest;
+        }
+
+        /// <summary>
         /// Gets or sets the operation data
         /// </summary>
         public T Data { get; protected set; }
