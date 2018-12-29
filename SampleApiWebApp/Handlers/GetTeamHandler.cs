@@ -15,7 +15,7 @@ namespace SampleApiWebApp.Handlers
 
         private IMapper Mapper { get; }
 
-        protected override Models.Team GenerateResponseEntity(Domain.Team entity)
+        protected override Models.Team MapEntity(Domain.Team entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 

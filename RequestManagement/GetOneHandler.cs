@@ -52,16 +52,16 @@ namespace RequestManagement
             var entity = await Repository.RetrieveById(request.Id);
             if (entity == null) return OperationResult.NotFound<TResponseEntity>();
 
-            var result = GenerateResponseEntity(entity);
+            var result = MapEntity(entity);
 
             return OperationResult.Success(result);
         }
 
         /// <summary>
-        /// Generates a response entity from the domain entity
+        /// Maps a domain entity to a response entity
         /// </summary>
         /// <param name="entity">Domain entity</param>
         /// <returns>Response entity</returns>
-        protected abstract TResponseEntity GenerateResponseEntity(TEntity entity);
+        protected abstract TResponseEntity MapEntity(TEntity entity);
     }
 }
