@@ -49,7 +49,7 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var entity = await Repository.RetrieveById(request.Id);
+            var entity = await Repository.RetrieveById(request.Id, cancellationToken);
             if (entity == null) return OperationResult.NotFound<TResponseEntity>();
 
             var result = MapEntity(entity);

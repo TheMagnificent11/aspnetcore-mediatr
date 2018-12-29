@@ -43,7 +43,7 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await Repository.RetrieveById(request.Id);
+            var domainEntity = await Repository.RetrieveById(request.Id, cancellationToken);
             if (domainEntity == null) return OperationResult.NotFound();
 
             var validationErrors = await ValidateRequest(domainEntity, request, cancellationToken);
@@ -51,7 +51,7 @@ namespace RequestManagement
 
             var updatedEntity = BindToDomainEntity(domainEntity, request);
 
-            await Repository.Update(updatedEntity);
+            await Repository.Update(updatedEntity, cancellationToken);
 
             return OperationResult.Success();
         }

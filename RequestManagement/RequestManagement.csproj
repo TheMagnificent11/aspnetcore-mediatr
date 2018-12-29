@@ -15,9 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityManagement" Version="0.2.0" />
-    <PackageReference Include="MediatR" Version="5.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
+    <PackageReference Include="EntityManagement" Version="1.0.0" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2">
       <ExcludeAssets>all</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>

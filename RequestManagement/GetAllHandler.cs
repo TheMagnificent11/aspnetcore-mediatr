@@ -45,7 +45,7 @@ namespace RequestManagement
             TRequest request,
             CancellationToken cancellationToken)
         {
-            var domainEntities = await Repository.RetrieveAll();
+            var domainEntities = await Repository.RetrieveAll(cancellationToken);
             var responseEntities = MapEntities(domainEntities);
 
             return OperationResult.Success<IEnumerable<TResponseEntity>>(responseEntities);

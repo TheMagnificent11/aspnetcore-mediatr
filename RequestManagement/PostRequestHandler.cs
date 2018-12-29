@@ -54,7 +54,7 @@ namespace RequestManagement
 
             var entity = GenerateDomainEntity(request);
 
-            await Repository.Create(entity);
+            await Repository.Create(entity, cancellationToken);
 
             return OperationResult.Success(entity.Id);
         }

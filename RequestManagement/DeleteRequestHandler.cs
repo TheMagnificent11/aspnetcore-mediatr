@@ -43,13 +43,13 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await Repository.RetrieveById(request.Id);
+            var domainEntity = await Repository.RetrieveById(request.Id, cancellationToken);
             if (domainEntity == null) return OperationResult.NotFound();
 
             var validationErrors = await ValidateDeletion(domainEntity, request, cancellationToken);
             if (validationErrors != null && validationErrors.Any()) return OperationResult.Fail(validationErrors);
 
-            await Repository.Delete(domainEntity.Id);
+            await Repository.Delete(domainEntity.Id, cancellationToken);
 
             return OperationResult.Success();
         }
