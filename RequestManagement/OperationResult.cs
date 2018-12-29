@@ -25,7 +25,7 @@ namespace RequestManagement
         public IDictionary<string, IEnumerable<string>> Errors { get; protected set; }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.OK"/> <see cref="OperationResult"/>
+        /// Creates a <see cref="HttpStatusCode.OK"/> <see cref="OperationResult"/>
         /// </summary>
         /// <returns>A <see cref="HttpStatusCode.OK"/> <see cref="OperationResult"/></returns>
         public static OperationResult Success()
@@ -38,7 +38,7 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.OK"/> <see cref="OperationResult{T}"/> with data
+        /// Creates a <see cref="HttpStatusCode.OK"/> <see cref="OperationResult{T}"/> with data
         /// </summary>
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="data">Data</param>
@@ -53,7 +53,7 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a set of errors
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a set of errors
         /// </summary>
         /// <param name="errors">Errors</param>
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
@@ -70,7 +70,7 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> with a set of errors
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> with a set of errors
         /// </summary>
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="errors">Errors</param>
@@ -88,7 +88,7 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a single non-field-specific error
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a single non-field-specific error
         /// </summary>
         /// <param name="errorMessage">Error message</param>
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
@@ -105,7 +105,7 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> with a single non-field-specific error
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> with a single non-field-specific error
         /// </summary>
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="errorMessage">Error message</param>
@@ -123,7 +123,20 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Gets a <see cref="HttpStatusCode.NotFound"/> failure <see cref="OperationResult{T}"/>
+        /// Creates a <see cref="HttpStatusCode.NotFound"/> failure <see cref="OperationResult"/>
+        /// </summary>
+        /// <returns>A <see cref="HttpStatusCode.NotFound"/> <see cref="OperationResult"/></returns>
+        public static OperationResult NotFound()
+        {
+            return new OperationResult
+            {
+                IsSuccess = false,
+                Status = HttpStatusCode.NotFound
+            };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="HttpStatusCode.NotFound"/> failure <see cref="OperationResult{T}"/>
         /// </summary>
         /// <typeparam name="T">Data type</typeparam>
         /// <returns>A <see cref="HttpStatusCode.NotFound"/> <see cref="OperationResult{T}"/></returns>
@@ -152,6 +165,17 @@ namespace RequestManagement
         internal OperationResult(T data)
         {
             Data = data;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OperationResult{T}"/> class
+        /// </summary>
+        /// <param name="errors">Errors</param>
+        internal OperationResult(IDictionary<string, IEnumerable<string>> errors)
+        {
+            Errors = errors;
+            IsSuccess = false;
+            Status = HttpStatusCode.BadRequest;
         }
 
         /// <summary>

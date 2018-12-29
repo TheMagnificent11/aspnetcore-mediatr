@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestManagement", "RequestManagement\RequestManagement.csproj", "{A7E23E3C-5F92-48E8-9966-97CF51A82058}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestManagement", "RequestManagement\RequestManagement.csproj", "{A7E23E3C-5F92-48E8-9966-97CF51A82058}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E48559A2-5C78-4D19-BA23-6CE6E407D8E3}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		CodeAnalysis.ruleset = CodeAnalysis.ruleset
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApiWebApp", "SampleApiWebApp\SampleApiWebApp.csproj", "{DF6531A4-7AC1-4404-9477-4C34AA876619}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +24,10 @@ Global
 		{A7E23E3C-5F92-48E8-9966-97CF51A82058}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7E23E3C-5F92-48E8-9966-97CF51A82058}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7E23E3C-5F92-48E8-9966-97CF51A82058}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF6531A4-7AC1-4404-9477-4C34AA876619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF6531A4-7AC1-4404-9477-4C34AA876619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF6531A4-7AC1-4404-9477-4C34AA876619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF6531A4-7AC1-4404-9477-4C34AA876619}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
