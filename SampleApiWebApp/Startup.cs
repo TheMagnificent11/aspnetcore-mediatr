@@ -77,7 +77,7 @@ namespace SampleApiWebApp
 
             services.AddAutoMapper();
 
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             ConfigureProblemDetails(services);
             ConfigureSwagger(services);

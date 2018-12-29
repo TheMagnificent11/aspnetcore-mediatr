@@ -43,7 +43,7 @@ namespace SampleApiWebApp.Controllers
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(Team))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetOne([FromRoute]long id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetOne([FromRoute]long id, CancellationToken cancellationToken = default)
         {
             var request = new GetTeamRequest { Id = id };
             var result = await Mediator.Send(request, cancellationToken);
@@ -61,7 +61,7 @@ namespace SampleApiWebApp.Controllers
         public async Task<IActionResult> Put(
             [FromRoute]long id,
             [FromBody]PutTeamRequest request,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
