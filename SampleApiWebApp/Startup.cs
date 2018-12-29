@@ -1,13 +1,9 @@
 using System;
-using System.Net;
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.Variance;
 using AutoMapper;
-using EntityManagement;
-using MediatR;
-using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RequestManagement;
-using SampleApiWebApp.Constants;
-using Swashbuckle.AspNetCore.Swagger;
+using SampleApiWebApp.Configuration;
 
 namespace SampleApiWebApp
 {
@@ -73,66 +68,22 @@ namespace SampleApiWebApp
             services.AddDbContextPool<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            ConfigureCors(services);
-
+            services.ConfigureCors(CorsPlolicyName);
             services.AddAutoMapper();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            ConfigureProblemDetails(services);
-            ConfigureSwagger(services);
+            services.ConfigureProblemDetails();
+            services.ConfigureSwagger("v1", ApiName);
 
             var builder = new ContainerBuilder();
             builder.RegisterSource(new ContravariantRegistrationSource());
             builder.Populate(services);
 
-            RegisterDataAccessTypes(builder);
-            RegisterMediatrHandlers(builder);
+            builder.RegisterModule(new DataModule());
+            builder.RegisterModule(new RequestManagementModule(new Assembly[] { typeof(Startup).Assembly }));
 
             return new AutofacServiceProvider(builder.Build());
-        }
-
-        private static void ConfigureCors(IServiceCollection services)
-        {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(
-                    CorsPlolicyName,
-                    policy =>
-                        policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
-            });
-        }
-
-        private static void ConfigureProblemDetails(IServiceCollection services)
-        {
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var problemDetails = new ValidationProblemDetails(context.ModelState)
-                    {
-                        Instance = context.HttpContext.Request.Path,
-                        Status = (int)HttpStatusCode.BadRequest,
-                        Detail = "Please refer to the errors property for additional details"
-                    };
-
-                    return new BadRequestObjectResult(problemDetails)
-                    {
-                        ContentTypes = { ContentTypes.ApplicationJson }
-                    };
-                };
-            });
-        }
-
-        private static void ConfigureSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = ApiName, Version = "v1" });
-            });
         }
 
         private static void Migrate(IApplicationBuilder app)
@@ -142,56 +93,6 @@ namespace SampleApiWebApp
                 var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
                 context.Database.Migrate();
             }
-        }
-
-        private static void RegisterDataAccessTypes(ContainerBuilder builder)
-        {
-            builder.RegisterType<DatabaseContext>()
-                .As<IDatabaseContext>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterGeneric(typeof(EntityRepository<,>))
-                .As(typeof(IEntityRepository<,>));
-        }
-
-        private static void RegisterMediatrHandlers(ContainerBuilder builder)
-        {
-            builder
-                .RegisterType<Mediator>()
-                .As<IMediator>()
-                .InstancePerLifetimeScope();
-
-            builder.Register<ServiceFactory>(context =>
-            {
-                var c = context.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
-            });
-
-            var mediatrOpenTypes = new[]
-            {
-                typeof(IRequestHandler<,>),
-                typeof(INotificationHandler<>),
-            };
-
-            var assemblies = new[]
-            {
-                typeof(Startup).Assembly,
-                typeof(OperationResult).Assembly
-            };
-
-            foreach (var assembly in assemblies)
-            {
-                foreach (var mediatrOpenType in mediatrOpenTypes)
-                {
-                    builder
-                        .RegisterAssemblyTypes(assembly)
-                        .AsClosedTypesOf(mediatrOpenType)
-                        .AsImplementedInterfaces();
-                }
-            }
-
-            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         }
     }
 }
