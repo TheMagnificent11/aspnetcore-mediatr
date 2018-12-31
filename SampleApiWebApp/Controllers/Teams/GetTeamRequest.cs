@@ -1,6 +1,6 @@
 ﻿using RequestManagement;
 
-namespace SampleApiWebApp.Models.Requests
+namespace SampleApiWebApp.Controllers.Teams
 {
     public class GetTeamRequest : IGetOneRequest<long, Team>
     {

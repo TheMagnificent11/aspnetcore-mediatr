@@ -1,4 +1,4 @@
-﻿using EntityManagement;
+﻿using EntityManagement.Abstractions;
 
 namespace SampleApiWebApp.Domain
 {
@@ -6,16 +6,16 @@ namespace SampleApiWebApp.Domain
     {
         public const int NameMaxLength = 50;
 
-        public long Id { get; set; }
+        public long Id { get; protected set; }
 
-        public string GivenName { get; set; }
+        public string GivenName { get; protected set; }
 
-        public string Surname { get; set; }
+        public string Surname { get; protected set; }
 
-        public long TeamId { get; set; }
+        public long TeamId { get; protected set; }
 
-        public Team Team { get; set; }
+        public Team Team { get; protected set; }
 
-        public int SquadNumber { get; set; }
+        public int SquadNumber { get; protected set; }
     }
 }

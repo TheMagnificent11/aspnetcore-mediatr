@@ -1,11 +1,11 @@
 ﻿using System;
 using AutoMapper;
-using EntityManagement;
+using EntityManagement.Abstractions;
 using RequestManagement;
 
-namespace SampleApiWebApp.Handlers
+namespace SampleApiWebApp.Controllers.Teams
 {
-    public sealed class PostTeamHandler : PostRequestHandler<long, Domain.Team, Models.Team, Models.Requests.PostTeamRequest>
+    public sealed class PostTeamHandler : PostRequestHandler<long, Domain.Team, Team, PostTeamRequest>
     {
         public PostTeamHandler(IEntityRepository<Domain.Team, long> repository, IMapper mapper)
             : base(repository)
@@ -15,7 +15,7 @@ namespace SampleApiWebApp.Handlers
 
         private IMapper Mapper { get; }
 
-        protected override Domain.Team GenerateDomainEntity(Models.Requests.PostTeamRequest request)
+        protected override Domain.Team GenerateDomainEntity(PostTeamRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 

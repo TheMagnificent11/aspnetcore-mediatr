@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using RequestManagement;
 
-namespace SampleApiWebApp.Models.Requests
+namespace SampleApiWebApp.Controllers.Teams
 {
     public class PostTeamRequest : IPostRequest<long, Team>
     {

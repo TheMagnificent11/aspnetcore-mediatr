@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SampleApiWebApp.Controllers
+namespace SampleApiWebApp.Controllers.Players
 {
     [ApiController]
     [Route("[controller]")]

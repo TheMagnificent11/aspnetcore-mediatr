@@ -5,10 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement;
 using SampleApiWebApp.Constants;
-using SampleApiWebApp.Models;
-using SampleApiWebApp.Models.Requests;
 
-namespace SampleApiWebApp.Controllers
+namespace SampleApiWebApp.Controllers.Teams
 {
     [ApiController]
     [Route("[controller]")]

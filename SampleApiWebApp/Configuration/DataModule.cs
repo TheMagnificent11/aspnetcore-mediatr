@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using EntityManagement;
+using EntityManagement.Abstractions;
 
 namespace SampleApiWebApp.Configuration
 {

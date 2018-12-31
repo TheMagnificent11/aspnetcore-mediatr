@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 
-namespace SampleApiWebApp.Models.Mappings
+namespace SampleApiWebApp.Controllers.Players
 {
     public sealed class PlayerMappings : Profile
     {
         public PlayerMappings()
         {
             CreateMap<Domain.Player, Player>();
-            CreateMap<Requests.PostPlayerRequest, Domain.Player>();
         }
     }
 }

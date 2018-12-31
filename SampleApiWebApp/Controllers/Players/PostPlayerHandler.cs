@@ -1,12 +1,12 @@
 ﻿using System;
 using AutoMapper;
-using EntityManagement;
+using EntityManagement.Abstractions;
 using RequestManagement;
 
-namespace SampleApiWebApp.Handlers
+namespace SampleApiWebApp.Controllers.Players
 {
     public sealed class PostPlayerHandler :
-        PostRequestHandler<long, Domain.Player, Models.Player, Models.Requests.PostPlayerRequest>
+        PostRequestHandler<long, Domain.Player, Player, PostPlayerRequest>
     {
         public PostPlayerHandler(IEntityRepository<Domain.Player, long> repository, IMapper mapper)
             : base(repository)
@@ -16,11 +16,9 @@ namespace SampleApiWebApp.Handlers
 
         private IMapper Mapper { get; }
 
-        protected override Domain.Player GenerateDomainEntity(Models.Requests.PostPlayerRequest request)
+        protected override Domain.Player GenerateDomainEntity(PostPlayerRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            return Mapper.Map<Domain.Player>(request);
         }
     }
 }

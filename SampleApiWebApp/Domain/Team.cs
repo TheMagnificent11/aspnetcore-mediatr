@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EntityManagement;
+using EntityManagement.Abstractions;
 
 namespace SampleApiWebApp.Domain
 {
@@ -7,10 +7,10 @@ namespace SampleApiWebApp.Domain
     {
         public const int NameMaxLength = 50;
 
-        public long Id { get; set; }
+        public long Id { get; protected set; }
 
-        public string Name { get; set; }
+        public string Name { get; protected set; }
 
-        public IList<Player> Players { get; set; }
+        public IList<Player> Players { get; protected set; }
     }
 }

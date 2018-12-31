@@ -1,4 +1,4 @@
-﻿namespace SampleApiWebApp.Models
+﻿namespace SampleApiWebApp.Controllers.Teams
 {
     public class Team
     {

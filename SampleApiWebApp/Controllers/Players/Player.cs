@@ -1,4 +1,4 @@
-﻿namespace SampleApiWebApp.Models
+﻿namespace SampleApiWebApp.Controllers.Players
 {
     public class Player
     {

@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 
-namespace SampleApiWebApp.Models.Mappings
+namespace SampleApiWebApp.Controllers.Teams
 {
     public sealed class TeamMappings : Profile
     {
         public TeamMappings()
         {
             CreateMap<Domain.Team, Team>();
-            CreateMap<Requests.PostTeamRequest, Domain.Team>();
         }
     }
 }

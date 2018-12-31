@@ -1,11 +1,11 @@
 ﻿using System;
 using AutoMapper;
-using EntityManagement;
+using EntityManagement.Abstractions;
 using RequestManagement;
 
-namespace SampleApiWebApp.Handlers
+namespace SampleApiWebApp.Controllers.Teams
 {
-    public sealed class GetTeamHandler : GetOneHandler<long, Domain.Team, Models.Team, Models.Requests.GetTeamRequest>
+    public sealed class GetTeamHandler : GetOneHandler<long, Domain.Team, Team, GetTeamRequest>
     {
         public GetTeamHandler(IEntityRepository<Domain.Team, long> repository, IMapper mapper)
             : base(repository)
@@ -15,11 +15,11 @@ namespace SampleApiWebApp.Handlers
 
         private IMapper Mapper { get; }
 
-        protected override Models.Team MapEntity(Domain.Team entity)
+        protected override Team MapEntity(Domain.Team entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            return Mapper.Map<Models.Team>(entity);
+            return Mapper.Map<Team>(entity);
         }
     }
 }
