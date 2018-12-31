@@ -33,7 +33,9 @@ namespace SampleApiWebApp.Controllers.Teams
 
             if (teamsWithSameName.Any())
             {
-                errors.Add(nameof(request.Name), new string[] { "Team name is not unique" });
+                errors.Add(
+                    nameof(request.Name),
+                    new string[] { string.Format(Domain.ErrorMessages.Teams.NameNotUniqueFormat, request.Name) });
             }
 
             return errors;

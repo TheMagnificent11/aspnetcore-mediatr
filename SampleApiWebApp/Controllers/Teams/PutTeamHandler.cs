@@ -33,7 +33,7 @@ namespace SampleApiWebApp.Controllers.Teams
             {
                 errors.Add(
                     nameof(request.Name),
-                    new string[] { string.Format(Constants.ErrorMessages.Teams.NameNotUniqueFormat, request.Name) });
+                    new string[] { string.Format(Domain.ErrorMessages.Teams.NameNotUniqueFormat, request.Name) });
             }
 
             return errors;
