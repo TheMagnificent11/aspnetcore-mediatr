@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using EntityManagement;
 using Microsoft.EntityFrameworkCore;
+using SampleApiWebApp.Data.Configuration;
 using SampleApiWebApp.Domain;
 
-namespace SampleApiWebApp
+namespace SampleApiWebApp.Data
 {
     public sealed class DatabaseContext : DbContext, IDatabaseContext
     {
@@ -27,6 +28,14 @@ namespace SampleApiWebApp
         public Task<int> SaveChangesAsync()
         {
             return SaveChangesAsync(true);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new TeamConfiguration());
+            modelBuilder.ApplyConfiguration(new PlayerConfiguration());
         }
     }
 }

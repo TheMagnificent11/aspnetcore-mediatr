@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RequestManagement;
 using SampleApiWebApp.Configuration;
+using SampleApiWebApp.Data;
 
 namespace SampleApiWebApp
 {

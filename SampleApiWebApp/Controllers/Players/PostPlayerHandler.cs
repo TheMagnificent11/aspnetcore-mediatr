@@ -18,7 +18,7 @@ namespace SampleApiWebApp.Controllers.Players
 
         protected override Domain.Player GenerateDomainEntity(PostPlayerRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            throw new NotImplementedException();
         }
     }
 }

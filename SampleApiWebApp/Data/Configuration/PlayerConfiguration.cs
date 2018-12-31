@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SampleApiWebApp.Domain;
 
-namespace SampleApiWebApp.DataConfiguration
+namespace SampleApiWebApp.Data.Configuration
 {
     public class PlayerConfiguration : IEntityTypeConfiguration<Player>
     {
