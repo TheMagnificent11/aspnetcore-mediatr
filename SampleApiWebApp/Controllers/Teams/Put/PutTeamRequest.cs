@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using RequestManagement;
 
-namespace SampleApiWebApp.Controllers.Teams
+namespace SampleApiWebApp.Controllers.Teams.Put
 {
-    public class PostTeamRequest : IPostRequest<long, Team>
+    public sealed class PutTeamRequest : IPutRequest<long>
     {
+        public long Id { get; set; }
+
         [Required]
         [Display(Name = "Name")]
         [MaxLength(Domain.Team.NameMaxLength)]

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using RequestManagement;
 
-namespace SampleApiWebApp.Controllers.Players
+namespace SampleApiWebApp.Controllers.Players.Post
 {
     public class PostPlayerRequest : IPostRequest<long, Player>
     {

@@ -3,27 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using EntityManagement.Abstractions;
 using RequestManagement;
 using SampleApiWebApp.Data.Queries;
 
-namespace SampleApiWebApp.Controllers.Teams
+namespace SampleApiWebApp.Controllers.Teams.Put
 {
-    public sealed class PostTeamHandler : PostRequestHandler<long, Domain.Team, Team, PostTeamRequest>
+    public sealed class PutTeamHandler : PutRequestHandler<long, Domain.Team, PutTeamRequest>
     {
-        public PostTeamHandler(IEntityRepository<Domain.Team, long> repository, IMapper mapper)
+        public PutTeamHandler(IEntityRepository<Domain.Team, long> repository)
             : base(repository)
         {
-            Mapper = mapper;
         }
 
-        private IMapper Mapper { get; }
-
         protected override async Task<IDictionary<string, IEnumerable<string>>> ValidateRequest(
-            PostTeamRequest request,
+            Domain.Team domainEntity,
+            PutTeamRequest request,
             CancellationToken cancellationToken)
         {
+            if (domainEntity == null) throw new ArgumentNullException(nameof(request));
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var errors = new Dictionary<string, IEnumerable<string>>();
@@ -31,7 +29,7 @@ namespace SampleApiWebApp.Controllers.Teams
             var query = new GetTeamsByName(request.Name);
             var teamsWithSameName = await Repository.Query(query, cancellationToken);
 
-            if (teamsWithSameName.Any())
+            if (teamsWithSameName.Any(i => i.Id != domainEntity.Id))
             {
                 errors.Add(
                     nameof(request.Name),
@@ -41,11 +39,12 @@ namespace SampleApiWebApp.Controllers.Teams
             return errors;
         }
 
-        protected override Domain.Team GenerateDomainEntity(PostTeamRequest request)
+        protected override void BindToDomainEntity(Domain.Team domainEntity, PutTeamRequest request)
         {
+            if (domainEntity == null) throw new ArgumentNullException(nameof(domainEntity));
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            return Domain.Team.CreateTeam(request.Name);
+            domainEntity.ChangeName(domainEntity, request.Name);
         }
     }
 }

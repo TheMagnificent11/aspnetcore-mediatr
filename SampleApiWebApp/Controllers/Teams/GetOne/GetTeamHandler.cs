@@ -3,7 +3,7 @@ using AutoMapper;
 using EntityManagement.Abstractions;
 using RequestManagement;
 
-namespace SampleApiWebApp.Controllers.Teams
+namespace SampleApiWebApp.Controllers.Teams.GetOne
 {
     public sealed class GetTeamHandler : GetOneHandler<long, Domain.Team, Team, GetTeamRequest>
     {

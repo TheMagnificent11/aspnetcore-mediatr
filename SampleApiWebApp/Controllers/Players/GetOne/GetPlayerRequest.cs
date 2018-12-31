@@ -1,6 +1,6 @@
 ﻿using RequestManagement;
 
-namespace SampleApiWebApp.Controllers.Players
+namespace SampleApiWebApp.Controllers.Players.GetOne
 {
     public class GetPlayerRequest : IGetOneRequest<long, Player>
     {

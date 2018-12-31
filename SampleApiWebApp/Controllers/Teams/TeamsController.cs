@@ -5,6 +5,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement;
 using SampleApiWebApp.Constants;
+using SampleApiWebApp.Controllers.Teams.GetOne;
+using SampleApiWebApp.Controllers.Teams.Post;
+using SampleApiWebApp.Controllers.Teams.Put;
 
 namespace SampleApiWebApp.Controllers.Teams
 {

@@ -3,7 +3,7 @@ using AutoMapper;
 using EntityManagement.Abstractions;
 using RequestManagement;
 
-namespace SampleApiWebApp.Controllers.Players
+namespace SampleApiWebApp.Controllers.Players.Post
 {
     public sealed class PostPlayerHandler :
         PostRequestHandler<long, Domain.Player, Player, PostPlayerRequest>
