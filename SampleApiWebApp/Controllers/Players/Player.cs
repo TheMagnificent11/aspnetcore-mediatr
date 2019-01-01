@@ -1,6 +1,8 @@
-﻿namespace SampleApiWebApp.Controllers.Players
+﻿using SampleApiWebApp.Domain;
+
+namespace SampleApiWebApp.Controllers.Players
 {
-    public class Player
+    public class Player : IPlayer
     {
         public long Id { get; set; }
 

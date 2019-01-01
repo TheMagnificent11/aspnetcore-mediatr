@@ -1,6 +1,8 @@
-﻿namespace SampleApiWebApp.Controllers.Teams
+﻿using SampleApiWebApp.Domain;
+
+namespace SampleApiWebApp.Controllers.Teams
 {
-    public class Team
+    public class Team : ITeam
     {
         public long Id { get; set; }
 
