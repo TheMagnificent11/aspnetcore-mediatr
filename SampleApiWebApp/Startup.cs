@@ -72,11 +72,18 @@ namespace SampleApiWebApp
             services.ConfigureCors(CorsPlolicyName);
             services.AddAutoMapper();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc(options => options.AddExceptionFilter())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureProblemDetails();
             services.ConfigureSwagger("v1", ApiName);
 
+            return GetServiceProvider(services);
+        }
+
+        private static IServiceProvider GetServiceProvider(IServiceCollection services)
+        {
             var builder = new ContainerBuilder();
             builder.RegisterSource(new ContravariantRegistrationSource());
             builder.Populate(services);
