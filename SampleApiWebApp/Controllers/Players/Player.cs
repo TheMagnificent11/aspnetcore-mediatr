@@ -12,6 +12,6 @@ namespace SampleApiWebApp.Controllers.Players
 
         public long TeamId { get; set; }
 
-        public int SquadNumber { get; set; }
+        public int Number { get; set; }
     }
 }
