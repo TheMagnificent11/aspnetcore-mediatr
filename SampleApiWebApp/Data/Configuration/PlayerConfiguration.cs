@@ -22,7 +22,7 @@ namespace SampleApiWebApp.Data.Configuration
                 .WithMany(i => i.Players)
                 .HasForeignKey(i => i.TeamId);
 
-            builder.HasIndex(i => new { i.TeamId, i.SquadNumber })
+            builder.HasIndex(i => new { i.TeamId, i.Number })
                 .IsUnique();
         }
     }

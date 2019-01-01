@@ -1,14 +1,12 @@
-﻿using FluentValidation;
+﻿using SampleApiWebApp.Domain.Validators;
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
-    public sealed class PutTeamValidator : AbstractValidator<PutTeamRequest>
+    public sealed class PutTeamValidator : BaseTeamValidator<PutTeamRequest>
     {
         public PutTeamValidator()
+            : base()
         {
-            RuleFor(i => i.Name)
-                .NotEmpty()
-                .MaximumLength(Domain.Team.FieldMaxLenghts.Name);
         }
     }
 }

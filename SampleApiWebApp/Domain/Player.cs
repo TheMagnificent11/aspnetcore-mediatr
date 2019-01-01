@@ -2,7 +2,7 @@
 
 namespace SampleApiWebApp.Domain
 {
-    public class Player : IEntity<long>
+    public class Player : IPlayer, IEntity<long>
     {
         public long Id { get; protected set; }
 
@@ -14,7 +14,7 @@ namespace SampleApiWebApp.Domain
 
         public Team Team { get; protected set; }
 
-        public int SquadNumber { get; protected set; }
+        public int Number { get; protected set; }
 
         public static class FieldNameMaxLengths
         {

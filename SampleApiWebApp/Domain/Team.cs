@@ -4,7 +4,7 @@ using EntityManagement.Abstractions;
 
 namespace SampleApiWebApp.Domain
 {
-    public class Team : IEntity<long>
+    public class Team : ITeam, IEntity<long>
     {
         public long Id { get; protected set; }
 

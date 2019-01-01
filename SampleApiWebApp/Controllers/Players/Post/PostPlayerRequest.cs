@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using RequestManagement;
+﻿using RequestManagement;
+using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
-    public class PostPlayerRequest : IPostRequest<long, Player>
+    public class PostPlayerRequest : IPostRequest<long, Player>, IPlayer
     {
         public string GivenName { get; set; }
 
@@ -11,7 +11,6 @@ namespace SampleApiWebApp.Controllers.Players.Post
 
         public long TeamId { get; set; }
 
-        [Range(0, 99)]
-        public int SquadNumber { get; set; }
+        public int Number { get; set; }
     }
 }
