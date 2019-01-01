@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EntityManagement.Abstractions;
-using RequestManagement;
+using FluentValidation.Extensions;
 using SampleApiWebApp.Domain.Validators;
 
 namespace SampleApiWebApp.Domain
