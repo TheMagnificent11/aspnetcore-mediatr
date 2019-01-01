@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement;
+using EntityManagement.Abstractions;
 using MediatR;
 
 namespace RequestManagement
@@ -49,9 +49,9 @@ namespace RequestManagement
             var validationErrors = await ValidateRequest(domainEntity, request, cancellationToken);
             if (validationErrors != null && validationErrors.Any()) return OperationResult.Fail(validationErrors);
 
-            var updatedEntity = BindToDomainEntity(domainEntity, request);
+            BindToDomainEntity(domainEntity, request);
 
-            await Repository.Update(updatedEntity, cancellationToken);
+            await Repository.Update(domainEntity, cancellationToken);
 
             return OperationResult.Success();
         }
@@ -59,10 +59,9 @@ namespace RequestManagement
         /// <summary>
         /// Generate a domain entity from create entity request
         /// </summary>
-        /// <param name="domainEntity">Domain entity read from the database</param>
+        /// <param name="domainEntity">Domain entity read from the database to be updated</param>
         /// <param name="request">Create entity request</param>
-        /// <returns>Entity to be created</returns>
-        protected abstract TEntity BindToDomainEntity(TEntity domainEntity, TRequest request);
+        protected abstract void BindToDomainEntity(TEntity domainEntity, TRequest request);
 
         /// <summary>
         /// Validate the request
