@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EntityManagement.Abstractions;
+using RequestManagement;
+using SampleApiWebApp.Domain.Validators;
 
 namespace SampleApiWebApp.Domain
 {
@@ -14,28 +17,29 @@ namespace SampleApiWebApp.Domain
 
         public static Team CreateTeam(string teamName)
         {
-            ValidateTeamName(teamName);
+            var team = new Team { Name = teamName };
 
-            return new Team { Name = teamName };
+            var errors = ValidateTeam(team);
+            if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
+
+            return team;
+        }
+
+        public static IDictionary<string, IEnumerable<string>> ValidateTeam(Team team)
+        {
+            var validator = new TeamValidator();
+
+            return validator.ValidateEntity(team);
         }
 
         public void ChangeName(Team team, string newName)
         {
             if (team == null) throw new ArgumentNullException(nameof(team));
 
-            ValidateTeamName(newName);
-
             team.Name = newName;
-        }
 
-        private static void ValidateTeamName(string teamName)
-        {
-            if (teamName == null) throw new ArgumentNullException(nameof(teamName));
-
-            if (teamName.Length > FieldMaxLenghts.Name)
-            {
-                throw new ArgumentException($"Team names cannot be longer than {FieldMaxLenghts.Name} characters");
-            }
+            var errors = ValidateTeam(team);
+            if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
         }
 
         public static class FieldMaxLenghts
