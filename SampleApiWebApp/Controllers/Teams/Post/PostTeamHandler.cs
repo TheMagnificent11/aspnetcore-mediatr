@@ -35,7 +35,7 @@ namespace SampleApiWebApp.Controllers.Teams.Post
             {
                 errors.Add(
                     nameof(request.Name),
-                    new string[] { string.Format(Domain.ErrorMessages.Teams.NameNotUniqueFormat, request.Name) });
+                    new string[] { string.Format(Domain.Team.ErrorMessages.NameNotUniqueFormat, request.Name) });
             }
 
             return errors;

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using RequestManagement;
+﻿using RequestManagement;
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
@@ -7,9 +6,6 @@ namespace SampleApiWebApp.Controllers.Teams.Put
     {
         public long Id { get; set; }
 
-        [Required]
-        [Display(Name = "Name")]
-        [MaxLength(Domain.Team.NameMaxLength)]
         public string Name { get; set; }
     }
 }

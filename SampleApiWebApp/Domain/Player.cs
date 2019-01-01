@@ -4,8 +4,6 @@ namespace SampleApiWebApp.Domain
 {
     public class Player : IEntity<long>
     {
-        public const int NameMaxLength = 50;
-
         public long Id { get; protected set; }
 
         public string GivenName { get; protected set; }
@@ -17,5 +15,10 @@ namespace SampleApiWebApp.Domain
         public Team Team { get; protected set; }
 
         public int SquadNumber { get; protected set; }
+
+        public static class FieldNameMaxLengths
+        {
+            public const int Name = 50;
+        }
     }
 }

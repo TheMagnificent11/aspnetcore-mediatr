@@ -6,8 +6,6 @@ namespace SampleApiWebApp.Domain
 {
     public class Team : IEntity<long>
     {
-        public const int NameMaxLength = 50;
-
         public long Id { get; protected set; }
 
         public string Name { get; protected set; }
@@ -34,10 +32,20 @@ namespace SampleApiWebApp.Domain
         {
             if (teamName == null) throw new ArgumentNullException(nameof(teamName));
 
-            if (teamName.Length > NameMaxLength)
+            if (teamName.Length > FieldMaxLenghts.Name)
             {
-                throw new ArgumentException($"Team names cannot be longer than {NameMaxLength} characters");
+                throw new ArgumentException($"Team names cannot be longer than {FieldMaxLenghts.Name} characters");
             }
+        }
+
+        public static class FieldMaxLenghts
+        {
+            public const int Name = 50;
+        }
+
+        public static class ErrorMessages
+        {
+            public const string NameNotUniqueFormat = "Team Name '{0}' is not unqiue";
         }
     }
 }
