@@ -44,7 +44,7 @@ namespace SampleApiWebApp.Controllers.Teams.Put
             if (domainEntity == null) throw new ArgumentNullException(nameof(domainEntity));
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            domainEntity.ChangeName(domainEntity, request.Name);
+            domainEntity.ChangeName(request.Name);
         }
     }
 }

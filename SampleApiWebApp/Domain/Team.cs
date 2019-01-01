@@ -32,13 +32,11 @@ namespace SampleApiWebApp.Domain
             return validator.ValidateEntity(team);
         }
 
-        public void ChangeName(Team team, string newName)
+        public void ChangeName(string newName)
         {
-            if (team == null) throw new ArgumentNullException(nameof(team));
+            Name = newName;
 
-            team.Name = newName;
-
-            var errors = ValidateTeam(team);
+            var errors = ValidateTeam(this);
             if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
         }
 
