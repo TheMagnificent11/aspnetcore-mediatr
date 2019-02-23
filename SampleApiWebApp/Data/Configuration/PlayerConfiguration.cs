@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using EntityManagement;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Data.Configuration
