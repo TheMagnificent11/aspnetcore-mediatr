@@ -1,11 +1,9 @@
-﻿using EntityManagement.Abstractions;
+﻿using EntityManagement.Core;
 
 namespace SampleApiWebApp.Domain
 {
-    public class Player : IPlayer, IEntity<long>
+    public class Player : BaseEntity<long>, IPlayer
     {
-        public long Id { get; protected set; }
-
         public string GivenName { get; protected set; }
 
         public string Surname { get; protected set; }

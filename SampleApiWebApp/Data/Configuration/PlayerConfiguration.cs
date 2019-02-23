@@ -1,14 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Data.Configuration
 {
-    public class PlayerConfiguration : IEntityTypeConfiguration<Player>
+    public class PlayerConfiguration : BaseEntityConfiguration<Player, long>
     {
-        public void Configure(EntityTypeBuilder<Player> builder)
+        public override void Configure(EntityTypeBuilder<Player> builder)
         {
-            builder.HasKey(i => i.Id);
+            base.Configure(builder);
 
             builder.Property(i => i.GivenName)
                 .IsRequired()

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EntityManagement.Abstractions;
+using EntityManagement.Core;
 using FluentValidation.Extensions;
 using SampleApiWebApp.Domain.Validators;
 
 namespace SampleApiWebApp.Domain
 {
-    public class Team : ITeam, IEntity<long>
+    public class Team : BaseEntity<long>, ITeam
     {
-        public long Id { get; protected set; }
-
         public string Name { get; protected set; }
 
         public IList<Player> Players { get; protected set; }
