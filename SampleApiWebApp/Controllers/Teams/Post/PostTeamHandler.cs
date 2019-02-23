@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using EntityManagement.Abstractions;
+using EntityManagement.Core;
 using RequestManagement;
 using SampleApiWebApp.Data.Queries;
 
