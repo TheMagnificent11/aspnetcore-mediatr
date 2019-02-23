@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement.Abstractions;
+using EntityManagement.Core;
 using MediatR;
 
 namespace RequestManagement

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SampleApiWebApp.Migrations
@@ -13,6 +14,10 @@ namespace SampleApiWebApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 255, nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 255, nullable: false),
+                    ModifiedAtUtc = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -26,6 +31,10 @@ namespace SampleApiWebApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 255, nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 255, nullable: false),
+                    ModifiedAtUtc = table.Column<DateTime>(nullable: false),
                     GivenName = table.Column<string>(maxLength: 50, nullable: false),
                     Surname = table.Column<string>(maxLength: 50, nullable: false),
                     TeamId = table.Column<long>(nullable: false),

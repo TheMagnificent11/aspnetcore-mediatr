@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityManagement;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Data.Configuration
 {
-    public class TeamConfiguration : IEntityTypeConfiguration<Team>
+    public class TeamConfiguration : BaseEntityConfiguration<Team, long>
     {
-        public void Configure(EntityTypeBuilder<Team> builder)
+        public override void Configure(EntityTypeBuilder<Team> builder)
         {
-            builder.HasKey(i => i.Id);
+            base.Configure(builder);
 
             builder.Property(i => i.Name)
                 .IsRequired()
