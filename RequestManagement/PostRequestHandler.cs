@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement.Core;
+using FluentValidation;
 using MediatR;
 
 namespace RequestManagement
@@ -49,33 +48,27 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var validationErrors = await ValidateRequest(request, cancellationToken);
-            if (validationErrors != null && validationErrors.Any()) return OperationResult.Fail<TId>(validationErrors);
+            try
+            {
+                var entity = await GenerateAndValidateDomainEntity(request, cancellationToken);
 
-            var entity = GenerateDomainEntity(request);
+                await Repository.Create(entity, cancellationToken);
 
-            await Repository.Create(entity, cancellationToken);
-
-            return OperationResult.Success(entity.Id);
+                return OperationResult.Success(entity.Id);
+            }
+            catch (ValidationException ex)
+            {
+                return OperationResult.Fail<TId>(ex.Errors);
+            }
         }
 
         /// <summary>
         /// Generate a domain entity from create entity request
         /// </summary>
         /// <param name="request">Create entity request</param>
+        /// <param name="cancellationToken">Canellation token</param>
         /// <returns>Entity to be created</returns>
-        protected abstract TEntity GenerateDomainEntity(TRequest request);
-
-        /// <summary>
-        /// Validate the request
-        /// </summary>
-        /// <param name="request">Reqest to validate</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Dictionary of validation errors keyed by request field name</returns>
-        protected virtual Task<IDictionary<string, IEnumerable<string>>> ValidateRequest(TRequest request, CancellationToken cancellationToken)
-        {
-            IDictionary<string, IEnumerable<string>> validationErrors = new Dictionary<string, IEnumerable<string>>();
-            return Task.FromResult(validationErrors);
-        }
+        /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
+        protected abstract Task<TEntity> GenerateAndValidateDomainEntity(TRequest request, CancellationToken cancellationToken);
     }
 }
