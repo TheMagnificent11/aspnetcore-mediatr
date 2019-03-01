@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using EntityManagement.Core;
 using RequestManagement;
+using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
-    public sealed class PostPlayerHandler :
-        PostRequestHandler<long, Domain.Player, Player, PostPlayerRequest>
+    public sealed class PostPlayerHandler : PostRequestHandler<long, Domain.Player, Player, PostPlayerRequest>
     {
         public PostPlayerHandler(IEntityRepository<Domain.Player, long> repository, IMapper mapper)
             : base(repository)
@@ -16,7 +18,7 @@ namespace SampleApiWebApp.Controllers.Players.Post
 
         private IMapper Mapper { get; }
 
-        protected override Domain.Player GenerateDomainEntity(PostPlayerRequest request)
+        protected override Task<Domain.Player> GenerateAndValidateDomainEntity(PostPlayerRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
