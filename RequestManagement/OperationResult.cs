@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using FluentValidation.Extensions;
+using FluentValidation.Results;
 
 namespace RequestManagement
 {
@@ -19,10 +21,12 @@ namespace RequestManagement
         /// </summary>
         public HttpStatusCode Status { get; protected set; }
 
+#pragma warning disable CA2227 // Collection properties should be read only
         /// <summary>
         /// Gets or sets a the operation errors
         /// </summary>
         public IDictionary<string, IEnumerable<string>> Errors { get; protected set; }
+#pragma warning restore CA2227 // Collection properties should be read only
 
         /// <summary>
         /// Creates a <see cref="HttpStatusCode.OK"/> <see cref="OperationResult"/>
@@ -85,6 +89,31 @@ namespace RequestManagement
                 Status = HttpStatusCode.BadRequest,
                 Errors = errors
             };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a set of errors
+        /// </summary>
+        /// <param name="validationErrors">Validation errors</param>
+        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
+        public static OperationResult Fail(IEnumerable<ValidationFailure> validationErrors)
+        {
+            if (validationErrors == null) throw new ArgumentNullException(nameof(validationErrors));
+
+            return Fail(validationErrors.GetErrors());
+        }
+
+        /// <summary>
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> with a set of errors
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="validationErrors">Validation errors</param>
+        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> containing no data</returns>
+        public static OperationResult<T> Fail<T>(IEnumerable<ValidationFailure> validationErrors)
+        {
+            if (validationErrors == null) throw new ArgumentNullException(nameof(validationErrors));
+
+            return Fail<T>(validationErrors.GetErrors());
         }
 
         /// <summary>
