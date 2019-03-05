@@ -12,7 +12,7 @@ namespace RequestManagement
     /// </summary>
     /// <typeparam name="T"><see cref="IAuthorizationRequirement"/> type</typeparam>
     public abstract class BaseClaimTypeAuthorizationHandler<T> : AuthorizationHandler<T>
-       where T : IAuthorizationRequirement
+       where T : IClaimTypeAuthorizationRequirement
     {
         /// <summary>
         /// Determines whether the user/client is authorized
