@@ -41,6 +41,8 @@ namespace RequestManagement
         /// <returns>Action result</returns>
         public static IActionResult ToActionResult(this OperationResult result)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+
             switch (result.Status)
             {
                 case HttpStatusCode.OK:

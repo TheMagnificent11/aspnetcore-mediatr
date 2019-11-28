@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EntityManagement;
 using Microsoft.EntityFrameworkCore;
 using SampleApiWebApp.Data.Configuration;
@@ -32,6 +33,8 @@ namespace SampleApiWebApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new TeamConfiguration());

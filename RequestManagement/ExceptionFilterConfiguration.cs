@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RequestManagement
 {
@@ -13,6 +14,8 @@ namespace RequestManagement
         /// <param name="options">MVC options</param>
         public static void AddExceptionFilter(this MvcOptions options)
         {
+            if (options == null) throw new ArgumentNullException(nameof(options));
+
             options.Filters.Add<ExceptionFilter>();
         }
     }

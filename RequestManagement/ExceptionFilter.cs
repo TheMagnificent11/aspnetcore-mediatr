@@ -20,6 +20,8 @@ namespace RequestManagement
         /// <returns>Asynchronous task</returns>
         public Task OnExceptionAsync(ExceptionContext context)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+
             if (context?.Exception == null) return Task.CompletedTask;
 
             switch (context.Exception)
