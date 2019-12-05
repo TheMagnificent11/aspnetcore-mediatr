@@ -19,6 +19,8 @@ namespace SampleApiWebApp.Domain
         {
             var team = new Team { Name = teamName };
 
+            team.ApplyTrackingData();
+
             var errors = ValidateTeam(team);
             if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
 
@@ -35,6 +37,8 @@ namespace SampleApiWebApp.Domain
         public void ChangeName(string newName)
         {
             Name = newName;
+
+            this.ApplyTrackingData();
 
             var errors = ValidateTeam(this);
             if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
