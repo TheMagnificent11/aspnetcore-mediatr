@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Features.Variance;
 using AutoMapper;
+using EntityManagement;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -63,7 +64,7 @@ namespace SampleApiWebApp
         {
             builder.RegisterSource(new ContravariantRegistrationSource());
 
-            builder.RegisterModule(new DataModule());
+            builder.RegisterModule(new EntityManagementModule<DatabaseContext>());
             builder.RegisterModule(new RequestManagementModule(new Assembly[] { typeof(Startup).Assembly }));
         }
 

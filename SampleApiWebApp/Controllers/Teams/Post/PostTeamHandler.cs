@@ -21,16 +21,18 @@ namespace SampleApiWebApp.Controllers.Teams.Post
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var query = new GetTeamsByName(request.Name);
+            var teamName = request.Name.Trim();
+
+            var query = new GetTeamsByName(teamName);
             var teamsWithSameName = await this.Repository.Query(query, cancellationToken);
 
             if (teamsWithSameName.Any())
             {
-                var error = new ValidationFailure(nameof(request.Name), string.Format(Domain.Team.ErrorMessages.NameNotUniqueFormat, request.Name));
+                var error = new ValidationFailure(nameof(request.Name), string.Format(Domain.Team.ErrorMessages.NameNotUniqueFormat, teamName));
                 throw new ValidationException(new ValidationFailure[] { error });
             }
 
-            return Domain.Team.CreateTeam(request.Name);
+            return Domain.Team.CreateTeam(teamName);
         }
     }
 }
