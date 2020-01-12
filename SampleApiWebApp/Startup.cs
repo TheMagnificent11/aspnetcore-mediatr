@@ -74,7 +74,7 @@ namespace SampleApiWebApp
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add(new ExceptionFilter()));
 
             services.ConfigureProblemDetails();
 

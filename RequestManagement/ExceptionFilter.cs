@@ -29,10 +29,6 @@ namespace RequestManagement
                 case ValidationException validationException:
                     context.Result = HandleValidationException(validationException);
                     break;
-
-                case InvalidOperationException invalidOperationException:
-                    context.Result = new BadRequestObjectResult(invalidOperationException.Message);
-                    break;
             }
 
             return Task.CompletedTask;
