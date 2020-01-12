@@ -36,7 +36,7 @@ namespace SampleApiWebApp.Domain
 
         public void ChangeName(string newName)
         {
-            Name = newName;
+            this.Name = newName;
 
             this.ApplyTrackingData();
 

@@ -8,26 +8,26 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Delete Request Handler
+    /// Get All Query Handler
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
-    public abstract class GetAllHandler<TId, TEntity, TResponseEntity, TRequest> :
-        IRequestHandler<TRequest, OperationResult<IEnumerable<TResponseEntity>>>
+    public abstract class GetAllQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
+        IRequestHandler<TRequest, CommandResult<IEnumerable<TResponseEntity>>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
-        where TRequest : class, IGetAllRequest<TResponseEntity>
+        where TRequest : class, IGetAllQuery<TResponseEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetAllHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="GetAllQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected GetAllHandler(IEntityRepository<TEntity, TId> repository)
+        protected GetAllQueryHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace RequestManagement
         /// <param name="request">Get all request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>An enumerable list of entities</returns>
-        public async Task<OperationResult<IEnumerable<TResponseEntity>>> Handle(
+        public async Task<CommandResult<IEnumerable<TResponseEntity>>> Handle(
             TRequest request,
             CancellationToken cancellationToken)
         {
-            var domainEntities = await Repository.RetrieveAll(cancellationToken);
-            var responseEntities = MapEntities(domainEntities);
+            var domainEntities = await this.Repository.RetrieveAll(cancellationToken);
+            var responseEntities = this.MapEntities(domainEntities);
 
-            return OperationResult.Success<IEnumerable<TResponseEntity>>(responseEntities);
+            return CommandResult.Success<IEnumerable<TResponseEntity>>(responseEntities);
         }
 
         /// <summary>

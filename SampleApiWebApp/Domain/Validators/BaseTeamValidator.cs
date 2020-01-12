@@ -7,7 +7,7 @@ namespace SampleApiWebApp.Domain.Validators
     {
         protected BaseTeamValidator()
         {
-            RuleFor(i => i.Name)
+            this.RuleFor(i => i.Name)
                 .NotEmpty()
                 .MaximumLength(Team.FieldMaxLenghts.Name);
         }

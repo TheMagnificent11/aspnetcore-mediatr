@@ -2,7 +2,7 @@
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
-    public sealed class PutTeamValidator : BaseTeamValidator<PutTeamRequest>
+    public sealed class PutTeamValidator : BaseTeamValidator<PutTeamCommand>
     {
         public PutTeamValidator()
             : base()

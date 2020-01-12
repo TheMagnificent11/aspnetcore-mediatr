@@ -8,26 +8,26 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Post Request Handler
+    /// Post Command Handler
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TRequestEntity">Request entity type</typeparam>
     /// <typeparam name="TRequest">Post request type</typeparam>
-    public abstract class PostRequestHandler<TId, TEntity, TRequestEntity, TRequest> :
-        IRequestHandler<TRequest, OperationResult<TId>>
+    public abstract class PostCommandHandler<TId, TEntity, TRequestEntity, TRequest> :
+        IRequestHandler<TRequest, CommandResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequestEntity : class
-        where TRequest : class, IPostRequest<TId, TRequestEntity>
+        where TRequest : class, IPostCommand<TId, TRequestEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostRequestHandler{TId, TEntity, TRequestEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="PostCommandHandler{TId, TEntity, TRequestEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected PostRequestHandler(IEntityRepository<TEntity, TId> repository)
+        protected PostCommandHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -41,24 +41,24 @@ namespace RequestManagement
         /// <param name="request">Post request</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>
-        /// An <see cref="OperationResult{T}"/> containing the ID of the created entity if successful,
+        /// An <see cref="CommandResult{T}"/> containing the ID of the created entity if successful,
         /// otherwise bad request operation result containing errors collection
         /// </returns>
-        public async Task<OperationResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<CommandResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             try
             {
-                var entity = await GenerateAndValidateDomainEntity(request, cancellationToken);
+                var entity = await this.GenerateAndValidateDomainEntity(request, cancellationToken);
 
-                await Repository.Create(entity, cancellationToken);
+                await this.Repository.Create(entity, cancellationToken);
 
-                return OperationResult.Success(entity.Id);
+                return CommandResult.Success(entity.Id);
             }
             catch (ValidationException ex)
             {
-                return OperationResult.Fail<TId>(ex.Errors);
+                return CommandResult.Fail<TId>(ex.Errors);
             }
         }
 

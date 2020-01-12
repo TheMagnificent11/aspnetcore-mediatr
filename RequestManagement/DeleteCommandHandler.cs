@@ -9,23 +9,23 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Delete Request Handler
+    /// Delete Command Handler
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
-    /// <typeparam name="TRequest">Put request type</typeparam>
-    public abstract class DeleteRequestHandler<TId, TEntity, TRequest> : IRequestHandler<TRequest, OperationResult>
+    /// <typeparam name="TRequest">Delete command type</typeparam>
+    public abstract class DeleteCommandHandler<TId, TEntity, TRequest> : IRequestHandler<TRequest, CommandResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
-        where TRequest : class, IPutRequest<TId>
+        where TRequest : class, IPutCommand<TId>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteRequestHandler{TId, TEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="DeleteCommandHandler{TId, TEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected DeleteRequestHandler(IEntityRepository<TEntity, TId> repository)
+        protected DeleteCommandHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -38,20 +38,20 @@ namespace RequestManagement
         /// </summary>
         /// <param name="request">Delete request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>An <see cref="OperationResult"/> that reports success and any validation errors it was a bad request</returns>
-        public async Task<OperationResult> Handle(TRequest request, CancellationToken cancellationToken)
+        /// <returns>An <see cref="CommandResult"/> that reports success and any validation errors it was a bad request</returns>
+        public async Task<CommandResult> Handle(TRequest request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await Repository.RetrieveById(request.Id, cancellationToken);
-            if (domainEntity == null) return OperationResult.NotFound();
+            var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
+            if (domainEntity == null) return CommandResult.NotFound();
 
-            var validationErrors = await ValidateDeletion(domainEntity, request, cancellationToken);
-            if (validationErrors != null && validationErrors.Any()) return OperationResult.Fail(validationErrors);
+            var validationErrors = await this.ValidateDeletion(domainEntity, request, cancellationToken);
+            if (validationErrors != null && validationErrors.Any()) return CommandResult.Fail(validationErrors);
 
-            await Repository.Delete(domainEntity.Id, cancellationToken);
+            await this.Repository.Delete(domainEntity.Id, cancellationToken);
 
-            return OperationResult.Success();
+            return CommandResult.Success();
         }
 
         /// <summary>

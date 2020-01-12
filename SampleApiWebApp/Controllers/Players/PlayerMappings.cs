@@ -6,7 +6,7 @@ namespace SampleApiWebApp.Controllers.Players
     {
         public PlayerMappings()
         {
-            CreateMap<Domain.Player, Player>();
+            this.CreateMap<Domain.Player, Player>();
         }
     }
 }

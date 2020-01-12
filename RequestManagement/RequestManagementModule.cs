@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
+using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 
@@ -17,7 +18,7 @@ namespace RequestManagement
         /// <param name="mediatrAssemblies">Mediatr assemblies</param>
         public RequestManagementModule(IEnumerable<Assembly> mediatrAssemblies)
         {
-            MediatrAssemblies = mediatrAssemblies;
+            this.MediatrAssemblies = mediatrAssemblies;
         }
 
         private IEnumerable<Assembly> MediatrAssemblies { get; }
@@ -41,13 +42,14 @@ namespace RequestManagement
 
             var mediatrOpenTypes = new[]
             {
+                typeof(IValidator<>),
                 typeof(IRequestHandler<,>),
                 typeof(INotificationHandler<>),
             };
 
             var assemblies = new List<Assembly>();
-            assemblies.AddRange(MediatrAssemblies);
-            assemblies.Add(typeof(OperationResult).Assembly);
+            assemblies.AddRange(this.MediatrAssemblies);
+            assemblies.Add(typeof(CommandResult).Assembly);
 
             foreach (var assembly in assemblies)
             {
@@ -60,9 +62,9 @@ namespace RequestManagement
                 }
             }
 
-            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>)).WithMetadata("Order", -500);
+            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>)).WithMetadata("Order", -100);
+            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>)).WithMetadata("Order", 100);
         }
     }
 }
