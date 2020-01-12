@@ -27,7 +27,7 @@ namespace RequestManagement
         /// <param name="repository">Entity repository</param>
         protected PostRequestHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace RequestManagement
 
             try
             {
-                var entity = await GenerateAndValidateDomainEntity(request, cancellationToken);
+                var entity = await this.GenerateAndValidateDomainEntity(request, cancellationToken);
 
-                await Repository.Create(entity, cancellationToken);
+                await this.Repository.Create(entity, cancellationToken);
 
                 return OperationResult.Success(entity.Id);
             }

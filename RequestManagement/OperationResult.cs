@@ -193,7 +193,7 @@ namespace RequestManagement
         /// <param name="data">Data</param>
         internal OperationResult(T data)
         {
-            Data = data;
+            this.Data = data;
         }
 
         /// <summary>
@@ -202,9 +202,9 @@ namespace RequestManagement
         /// <param name="errors">Errors</param>
         internal OperationResult(IDictionary<string, IEnumerable<string>> errors)
         {
-            Errors = errors;
-            IsSuccess = false;
-            Status = HttpStatusCode.BadRequest;
+            this.Errors = errors;
+            this.IsSuccess = false;
+            this.Status = HttpStatusCode.BadRequest;
         }
 
         /// <summary>

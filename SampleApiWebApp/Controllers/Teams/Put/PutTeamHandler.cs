@@ -23,7 +23,7 @@ namespace SampleApiWebApp.Controllers.Teams.Put
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var query = new GetTeamsByName(request.Name);
-            var teamsWithSameName = await Repository.Query(query, cancellationToken);
+            var teamsWithSameName = await this.Repository.Query(query, cancellationToken);
 
             if (teamsWithSameName.Any(i => i.Id != domainEntity.Id))
             {

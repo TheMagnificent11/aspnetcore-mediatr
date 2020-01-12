@@ -27,7 +27,7 @@ namespace RequestManagement
         /// <param name="repository">Entity repository</param>
         protected GetAllHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -45,8 +45,8 @@ namespace RequestManagement
             TRequest request,
             CancellationToken cancellationToken)
         {
-            var domainEntities = await Repository.RetrieveAll(cancellationToken);
-            var responseEntities = MapEntities(domainEntities);
+            var domainEntities = await this.Repository.RetrieveAll(cancellationToken);
+            var responseEntities = this.MapEntities(domainEntities);
 
             return OperationResult.Success<IEnumerable<TResponseEntity>>(responseEntities);
         }

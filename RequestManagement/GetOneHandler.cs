@@ -26,7 +26,7 @@ namespace RequestManagement
         /// <param name="repository">Entity repository</param>
         protected GetOneHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -49,10 +49,10 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var entity = await Repository.RetrieveById(request.Id, cancellationToken);
+            var entity = await this.Repository.RetrieveById(request.Id, cancellationToken);
             if (entity == null) return OperationResult.NotFound<TResponseEntity>();
 
-            var result = MapEntity(entity);
+            var result = this.MapEntity(entity);
 
             return OperationResult.Success(result);
         }

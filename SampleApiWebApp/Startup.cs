@@ -23,7 +23,7 @@ namespace SampleApiWebApp
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         private IConfiguration Configuration { get; set; }
@@ -67,7 +67,7 @@ namespace SampleApiWebApp
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddDbContextPool<DatabaseContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services.ConfigureCors(CorsPlolicyName);
             services.AddAutoMapper();

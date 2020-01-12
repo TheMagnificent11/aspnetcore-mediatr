@@ -25,7 +25,7 @@ namespace RequestManagement
         /// <param name="repository">Entity repository</param>
         protected DeleteRequestHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -43,13 +43,13 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await Repository.RetrieveById(request.Id, cancellationToken);
+            var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
             if (domainEntity == null) return OperationResult.NotFound();
 
-            var validationErrors = await ValidateDeletion(domainEntity, request, cancellationToken);
+            var validationErrors = await this.ValidateDeletion(domainEntity, request, cancellationToken);
             if (validationErrors != null && validationErrors.Any()) return OperationResult.Fail(validationErrors);
 
-            await Repository.Delete(domainEntity.Id, cancellationToken);
+            await this.Repository.Delete(domainEntity.Id, cancellationToken);
 
             return OperationResult.Success();
         }

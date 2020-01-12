@@ -24,7 +24,7 @@ namespace RequestManagement
         /// <param name="repository">Entity repository</param>
         protected PutRequestHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -42,14 +42,14 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await Repository.RetrieveById(request.Id, cancellationToken);
+            var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
             if (domainEntity == null) return OperationResult.NotFound();
 
             try
             {
-                await BindToDomainEntityAndValidate(domainEntity, request, cancellationToken);
+                await this.BindToDomainEntityAndValidate(domainEntity, request, cancellationToken);
 
-                await Repository.Update(domainEntity, cancellationToken);
+                await this.Repository.Update(domainEntity, cancellationToken);
             }
             catch (ValidationException ex)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace SampleApiWebApp.Controllers.Teams.Post
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var query = new GetTeamsByName(request.Name);
-            var teamsWithSameName = await Repository.Query(query, cancellationToken);
+            var teamsWithSameName = await this.Repository.Query(query, cancellationToken);
 
             if (teamsWithSameName.Any())
             {

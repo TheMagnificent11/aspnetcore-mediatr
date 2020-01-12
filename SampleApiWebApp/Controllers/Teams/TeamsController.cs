@@ -17,7 +17,7 @@ namespace SampleApiWebApp.Controllers.Teams
     {
         public TeamsController(IMediator mediator)
         {
-            Mediator = mediator;
+            this.Mediator = mediator;
         }
 
         private IMediator Mediator { get; }
@@ -33,7 +33,7 @@ namespace SampleApiWebApp.Controllers.Teams
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var result = await Mediator.Send(request, cancellationToken);
+            var result = await this.Mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }
@@ -47,7 +47,7 @@ namespace SampleApiWebApp.Controllers.Teams
         public async Task<IActionResult> GetOne([FromRoute]long id, CancellationToken cancellationToken = default)
         {
             var request = new GetTeamRequest { Id = id };
-            var result = await Mediator.Send(request, cancellationToken);
+            var result = await this.Mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }
@@ -68,7 +68,7 @@ namespace SampleApiWebApp.Controllers.Teams
 
             request.Id = id;
 
-            var result = await Mediator.Send(request, cancellationToken);
+            var result = await this.Mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }

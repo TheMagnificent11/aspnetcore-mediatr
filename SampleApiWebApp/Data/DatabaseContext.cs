@@ -23,12 +23,12 @@ namespace SampleApiWebApp.Data
         public DbSet<T> EntitySet<T>()
             where T : class
         {
-            return Set<T>();
+            return this.Set<T>();
         }
 
         public Task<int> SaveChangesAsync()
         {
-            return SaveChangesAsync(true);
+            return this.SaveChangesAsync(true);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

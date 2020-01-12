@@ -17,7 +17,7 @@ namespace RequestManagement
         /// <param name="mediatrAssemblies">Mediatr assemblies</param>
         public RequestManagementModule(IEnumerable<Assembly> mediatrAssemblies)
         {
-            MediatrAssemblies = mediatrAssemblies;
+            this.MediatrAssemblies = mediatrAssemblies;
         }
 
         private IEnumerable<Assembly> MediatrAssemblies { get; }
@@ -46,7 +46,7 @@ namespace RequestManagement
             };
 
             var assemblies = new List<Assembly>();
-            assemblies.AddRange(MediatrAssemblies);
+            assemblies.AddRange(this.MediatrAssemblies);
             assemblies.Add(typeof(OperationResult).Assembly);
 
             foreach (var assembly in assemblies)
