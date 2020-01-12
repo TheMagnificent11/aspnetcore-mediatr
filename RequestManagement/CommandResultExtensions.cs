@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace RequestManagement
 {
     /// <summary>
-    /// Operational Result Extension Methods
+    /// Command Result Extension Methods
     /// </summary>
-    public static class OperationResultExtensions
+    public static class CommandResultExtensions
     {
         /// <summary>
         /// Converts to a <see cref="ValidationProblemDetails"/> object
         /// </summary>
-        /// <param name="result">Operation result to convert</param>
+        /// <param name="result">Command result to convert</param>
         /// <returns>Validation problem details</returns>
-        public static ValidationProblemDetails ToProblemDetails(this OperationResult result)
+        public static ValidationProblemDetails ToProblemDetails(this CommandResult result)
         {
             if (result == null) throw new ArgumentNullException(nameof(result));
 
@@ -39,8 +39,10 @@ namespace RequestManagement
         /// </summary>
         /// <param name="result">Operation result to convert</param>
         /// <returns>Action result</returns>
-        public static IActionResult ToActionResult(this OperationResult result)
+        public static IActionResult ToActionResult(this CommandResult result)
         {
+            if (result == null) throw new ArgumentNullException(nameof(result));
+
             switch (result.Status)
             {
                 case HttpStatusCode.OK:
@@ -64,7 +66,7 @@ namespace RequestManagement
         /// <typeparam name="T">Operation result data type</typeparam>
         /// <param name="result">Operation result to convert</param>
         /// <returns>Action result</returns>
-        public static IActionResult ToActionResult<T>(this OperationResult<T> result)
+        public static IActionResult ToActionResult<T>(this CommandResult<T> result)
         {
             if (result == null) throw new ArgumentNullException(nameof(result));
 

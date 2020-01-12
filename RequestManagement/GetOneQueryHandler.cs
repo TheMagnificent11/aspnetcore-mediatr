@@ -7,26 +7,26 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Get One Handler
+    /// Get One Query Handler
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
-    public abstract class GetOneHandler<TId, TEntity, TResponseEntity, TRequest> :
-        IRequestHandler<TRequest, OperationResult<TResponseEntity>>
+    public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
+        IRequestHandler<TRequest, CommandResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
-        where TRequest : class, IGetOneRequest<TId, TResponseEntity>
+        where TRequest : class, IGetOneQuery<TId, TResponseEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetOneHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="GetOneQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected GetOneHandler(IEntityRepository<TEntity, TId> repository)
+        protected GetOneQueryHandler(IEntityRepository<TEntity, TId> repository)
         {
-            Repository = repository;
+            this.Repository = repository;
         }
 
         /// <summary>
@@ -43,18 +43,18 @@ namespace RequestManagement
         /// Operation result containing the response entity as the data if successful,
         /// otherwise not found operation result
         /// </returns>
-        public async Task<OperationResult<TResponseEntity>> Handle(
+        public async Task<CommandResult<TResponseEntity>> Handle(
             TRequest request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var entity = await Repository.RetrieveById(request.Id, cancellationToken);
-            if (entity == null) return OperationResult.NotFound<TResponseEntity>();
+            var entity = await this.Repository.RetrieveById(request.Id, cancellationToken);
+            if (entity == null) return CommandResult.NotFound<TResponseEntity>();
 
-            var result = MapEntity(entity);
+            var result = this.MapEntity(entity);
 
-            return OperationResult.Success(result);
+            return CommandResult.Success(result);
         }
 
         /// <summary>

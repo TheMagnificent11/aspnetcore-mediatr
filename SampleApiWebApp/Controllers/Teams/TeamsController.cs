@@ -17,7 +17,7 @@ namespace SampleApiWebApp.Controllers.Teams
     {
         public TeamsController(IMediator mediator)
         {
-            Mediator = mediator;
+            this.Mediator = mediator;
         }
 
         private IMediator Mediator { get; }
@@ -28,12 +28,12 @@ namespace SampleApiWebApp.Controllers.Teams
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<IActionResult> Post(
-            [FromBody]PostTeamRequest request,
+            [FromBody]PostTeamCommand request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var result = await Mediator.Send(request, cancellationToken);
+            var result = await this.Mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }
@@ -47,7 +47,7 @@ namespace SampleApiWebApp.Controllers.Teams
         public async Task<IActionResult> GetOne([FromRoute]long id, CancellationToken cancellationToken = default)
         {
             var request = new GetTeamRequest { Id = id };
-            var result = await Mediator.Send(request, cancellationToken);
+            var result = await this.Mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }
@@ -61,14 +61,14 @@ namespace SampleApiWebApp.Controllers.Teams
         [ProducesResponseType(404)]
         public async Task<IActionResult> Put(
             [FromRoute]long id,
-            [FromBody]PutTeamRequest request,
+            [FromBody]PutTeamCommand request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             request.Id = id;
 
-            var result = await Mediator.Send(request, cancellationToken);
+            var result = await this.Mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }

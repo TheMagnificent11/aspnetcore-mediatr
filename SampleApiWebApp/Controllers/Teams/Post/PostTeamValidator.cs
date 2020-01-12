@@ -2,7 +2,7 @@
 
 namespace SampleApiWebApp.Controllers.Teams.Post
 {
-    public sealed class PostTeamValidator : BaseTeamValidator<PostTeamRequest>
+    public sealed class PostTeamValidator : BaseTeamValidator<PostTeamCommand>
     {
     }
 }

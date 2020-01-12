@@ -5,12 +5,12 @@ using RequestManagement;
 
 namespace SampleApiWebApp.Controllers.Teams.GetOne
 {
-    public sealed class GetTeamHandler : GetOneHandler<long, Domain.Team, Team, GetTeamRequest>
+    public sealed class GetTeamHandler : GetOneQueryHandler<long, Domain.Team, Team, GetTeamRequest>
     {
         public GetTeamHandler(IEntityRepository<Domain.Team, long> repository, IMapper mapper)
             : base(repository)
         {
-            Mapper = mapper;
+            this.Mapper = mapper;
         }
 
         private IMapper Mapper { get; }
@@ -19,7 +19,7 @@ namespace SampleApiWebApp.Controllers.Teams.GetOne
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            return Mapper.Map<Team>(entity);
+            return this.Mapper.Map<Team>(entity);
         }
     }
 }

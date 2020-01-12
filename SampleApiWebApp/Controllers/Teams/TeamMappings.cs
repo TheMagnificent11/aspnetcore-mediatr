@@ -6,7 +6,7 @@ namespace SampleApiWebApp.Controllers.Teams
     {
         public TeamMappings()
         {
-            CreateMap<Domain.Team, Team>();
+            this.CreateMap<Domain.Team, Team>();
         }
     }
 }

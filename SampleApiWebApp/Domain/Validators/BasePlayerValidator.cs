@@ -7,18 +7,18 @@ namespace SampleApiWebApp.Domain.Validators
     {
         protected BasePlayerValidator()
         {
-            RuleFor(i => i.GivenName)
+            this.RuleFor(i => i.GivenName)
                 .NotEmpty()
                 .MaximumLength(Player.FieldNameMaxLengths.Name);
 
-            RuleFor(i => i.Surname)
+            this.RuleFor(i => i.Surname)
                 .NotEmpty()
                 .MaximumLength(Player.FieldNameMaxLengths.Name);
 
-            RuleFor(i => i.TeamId)
+            this.RuleFor(i => i.TeamId)
                 .GreaterThan(0);
 
-            RuleFor(i => i.Number)
+            this.RuleFor(i => i.Number)
                 .InclusiveBetween(1, 99);
         }
     }

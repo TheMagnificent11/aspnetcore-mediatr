@@ -20,16 +20,14 @@ namespace RequestManagement
         /// <returns>Asynchronous task</returns>
         public Task OnExceptionAsync(ExceptionContext context)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+
             if (context?.Exception == null) return Task.CompletedTask;
 
             switch (context.Exception)
             {
                 case ValidationException validationException:
                     context.Result = HandleValidationException(validationException);
-                    break;
-
-                case InvalidOperationException invalidOperationException:
-                    context.Result = new BadRequestObjectResult(invalidOperationException.Message);
                     break;
             }
 
@@ -42,7 +40,7 @@ namespace RequestManagement
                 .ToList()
                 .GetErrors();
 
-            var operationResult = OperationResult.Fail(errors);
+            var operationResult = CommandResult.Fail(errors);
 
             return new BadRequestObjectResult(operationResult.ToProblemDetails());
         }

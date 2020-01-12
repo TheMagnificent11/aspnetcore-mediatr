@@ -3,7 +3,7 @@ using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
-    public class PostPlayerRequest : IPostRequest<long, Player>, IPlayer
+    public class PostPlayerCommand : IPostCommand<long, Player>, IPlayer
     {
         public string GivenName { get; set; }
 

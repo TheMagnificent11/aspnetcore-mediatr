@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EntityManagement;
 using Microsoft.EntityFrameworkCore;
 using SampleApiWebApp.Data.Configuration;
@@ -22,16 +23,18 @@ namespace SampleApiWebApp.Data
         public DbSet<T> EntitySet<T>()
             where T : class
         {
-            return Set<T>();
+            return this.Set<T>();
         }
 
         public Task<int> SaveChangesAsync()
         {
-            return SaveChangesAsync(true);
+            return this.SaveChangesAsync(true);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new TeamConfiguration());

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace RequestManagement
         /// <param name="validators">Validators</param>
         public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
-            Validators = validators;
+            this.Validators = validators;
         }
 
         private IEnumerable<IValidator<TRequest>> Validators { get; }
@@ -38,7 +39,9 @@ namespace RequestManagement
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            var tasks = Validators.Select(v => v.ValidateAsync(request, cancellationToken));
+            if (next == null) throw new ArgumentNullException(nameof(next));
+
+            var tasks = this.Validators.Select(v => v.ValidateAsync(request, cancellationToken));
             var results = await Task.WhenAll(tasks);
             var failures = results
                 .SelectMany(result => result.Errors)

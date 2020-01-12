@@ -1,4 +1,5 @@
-﻿using EntityManagement;
+﻿using System;
+using EntityManagement;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SampleApiWebApp.Domain;
 
@@ -8,6 +9,8 @@ namespace SampleApiWebApp.Data.Configuration
     {
         public override void Configure(EntityTypeBuilder<Player> builder)
         {
+            if (builder == null) throw new ArgumentNullException(nameof(builder));
+
             base.Configure(builder);
 
             builder.Property(i => i.GivenName)
