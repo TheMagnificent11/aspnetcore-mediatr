@@ -14,7 +14,7 @@ namespace RequestManagement
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
     public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
-        IRequestHandler<TRequest, OperationResult<TResponseEntity>>
+        IRequestHandler<TRequest, CommandResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
@@ -43,7 +43,7 @@ namespace RequestManagement
         /// Operation result containing the response entity as the data if successful,
         /// otherwise not found operation result
         /// </returns>
-        public async Task<OperationResult<TResponseEntity>> Handle(
+        public async Task<CommandResult<TResponseEntity>> Handle(
             TRequest request,
             CancellationToken cancellationToken)
         {

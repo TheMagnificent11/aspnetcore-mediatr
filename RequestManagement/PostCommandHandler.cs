@@ -15,7 +15,7 @@ namespace RequestManagement
     /// <typeparam name="TRequestEntity">Request entity type</typeparam>
     /// <typeparam name="TRequest">Post request type</typeparam>
     public abstract class PostCommandHandler<TId, TEntity, TRequestEntity, TRequest> :
-        IRequestHandler<TRequest, OperationResult<TId>>
+        IRequestHandler<TRequest, CommandResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequestEntity : class
@@ -41,10 +41,10 @@ namespace RequestManagement
         /// <param name="request">Post request</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>
-        /// An <see cref="OperationResult{T}"/> containing the ID of the created entity if successful,
+        /// An <see cref="CommandResult{T}"/> containing the ID of the created entity if successful,
         /// otherwise bad request operation result containing errors collection
         /// </returns>
-        public async Task<OperationResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<CommandResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 

@@ -66,7 +66,7 @@ namespace RequestManagement
         /// <typeparam name="T">Operation result data type</typeparam>
         /// <param name="result">Operation result to convert</param>
         /// <returns>Action result</returns>
-        public static IActionResult ToActionResult<T>(this OperationResult<T> result)
+        public static IActionResult ToActionResult<T>(this CommandResult<T> result)
         {
             if (result == null) throw new ArgumentNullException(nameof(result));
 

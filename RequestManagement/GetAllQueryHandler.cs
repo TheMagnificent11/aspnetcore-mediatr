@@ -15,7 +15,7 @@ namespace RequestManagement
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
     public abstract class GetAllQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
-        IRequestHandler<TRequest, OperationResult<IEnumerable<TResponseEntity>>>
+        IRequestHandler<TRequest, CommandResult<IEnumerable<TResponseEntity>>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
@@ -41,7 +41,7 @@ namespace RequestManagement
         /// <param name="request">Get all request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>An enumerable list of entities</returns>
-        public async Task<OperationResult<IEnumerable<TResponseEntity>>> Handle(
+        public async Task<CommandResult<IEnumerable<TResponseEntity>>> Handle(
             TRequest request,
             CancellationToken cancellationToken)
         {
