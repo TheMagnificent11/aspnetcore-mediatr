@@ -28,7 +28,7 @@ namespace SampleApiWebApp.Controllers.Teams
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<IActionResult> Post(
-            [FromBody]PostTeamRequest request,
+            [FromBody]PostTeamCommand request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
@@ -61,7 +61,7 @@ namespace SampleApiWebApp.Controllers.Teams
         [ProducesResponseType(404)]
         public async Task<IActionResult> Put(
             [FromRoute]long id,
-            [FromBody]PutTeamRequest request,
+            [FromBody]PutTeamCommand request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));

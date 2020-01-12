@@ -5,7 +5,7 @@ using RequestManagement;
 
 namespace SampleApiWebApp.Controllers.Teams.GetOne
 {
-    public sealed class GetTeamHandler : GetOneHandler<long, Domain.Team, Team, GetTeamRequest>
+    public sealed class GetTeamHandler : GetOneQueryHandler<long, Domain.Team, Team, GetTeamRequest>
     {
         public GetTeamHandler(IEntityRepository<Domain.Team, long> repository, IMapper mapper)
             : base(repository)

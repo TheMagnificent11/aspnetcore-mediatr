@@ -7,9 +7,9 @@ using FluentValidation.Results;
 namespace RequestManagement
 {
     /// <summary>
-    /// Operation Result
+    /// Command Result
     /// </summary>
-    public class OperationResult
+    public class CommandResult
     {
         /// <summary>
         /// Gets or sets a value indicating whether the operation was successful
@@ -29,12 +29,12 @@ namespace RequestManagement
 #pragma warning restore CA2227 // Collection properties should be read only
 
         /// <summary>
-        /// Creates a <see cref="HttpStatusCode.OK"/> <see cref="OperationResult"/>
+        /// Creates a <see cref="HttpStatusCode.OK"/> <see cref="CommandResult"/>
         /// </summary>
-        /// <returns>A <see cref="HttpStatusCode.OK"/> <see cref="OperationResult"/></returns>
-        public static OperationResult Success()
+        /// <returns>A <see cref="HttpStatusCode.OK"/> <see cref="CommandResult"/></returns>
+        public static CommandResult Success()
         {
-            return new OperationResult()
+            return new CommandResult()
             {
                 IsSuccess = true,
                 Status = HttpStatusCode.OK
@@ -57,15 +57,15 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a set of errors
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="CommandResult"/> with a set of errors
         /// </summary>
         /// <param name="errors">Errors</param>
-        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
-        public static OperationResult Fail(IDictionary<string, IEnumerable<string>> errors)
+        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="CommandResult"/></returns>
+        public static CommandResult Fail(IDictionary<string, IEnumerable<string>> errors)
         {
             if (errors == null) throw new ArgumentNullException(nameof(errors));
 
-            return new OperationResult()
+            return new CommandResult()
             {
                 IsSuccess = false,
                 Status = HttpStatusCode.BadRequest,
@@ -92,11 +92,11 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a set of errors
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="CommandResult"/> with a set of errors
         /// </summary>
         /// <param name="validationErrors">Validation errors</param>
-        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
-        public static OperationResult Fail(IEnumerable<ValidationFailure> validationErrors)
+        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="CommandResult"/></returns>
+        public static CommandResult Fail(IEnumerable<ValidationFailure> validationErrors)
         {
             if (validationErrors == null) throw new ArgumentNullException(nameof(validationErrors));
 
@@ -117,11 +117,11 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/> with a single non-field-specific error
+        /// Creates a <see cref="HttpStatusCode.BadRequest"/> <see cref="CommandResult"/> with a single non-field-specific error
         /// </summary>
         /// <param name="errorMessage">Error message</param>
-        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
-        public static OperationResult Fail(string errorMessage)
+        /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="CommandResult"/></returns>
+        public static CommandResult Fail(string errorMessage)
         {
             if (errorMessage == null) throw new ArgumentNullException(nameof(errorMessage));
 
@@ -152,12 +152,12 @@ namespace RequestManagement
         }
 
         /// <summary>
-        /// Creates a <see cref="HttpStatusCode.NotFound"/> failure <see cref="OperationResult"/>
+        /// Creates a <see cref="HttpStatusCode.NotFound"/> failure <see cref="CommandResult"/>
         /// </summary>
-        /// <returns>A <see cref="HttpStatusCode.NotFound"/> <see cref="OperationResult"/></returns>
-        public static OperationResult NotFound()
+        /// <returns>A <see cref="HttpStatusCode.NotFound"/> <see cref="CommandResult"/></returns>
+        public static CommandResult NotFound()
         {
-            return new OperationResult
+            return new CommandResult
             {
                 IsSuccess = false,
                 Status = HttpStatusCode.NotFound
@@ -184,7 +184,7 @@ namespace RequestManagement
     /// Operation Result
     /// </summary>
     /// <typeparam name="T">Data type</typeparam>
-    public class OperationResult<T> : OperationResult
+    public class OperationResult<T> : CommandResult
 #pragma warning restore SA1402 // File may only contain a single class
     {
         /// <summary>

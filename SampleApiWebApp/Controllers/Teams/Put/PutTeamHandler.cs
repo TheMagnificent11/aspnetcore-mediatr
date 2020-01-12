@@ -10,14 +10,14 @@ using SampleApiWebApp.Data.Queries;
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
-    public sealed class PutTeamHandler : PutRequestHandler<long, Domain.Team, PutTeamRequest>
+    public sealed class PutTeamHandler : PutCommandHandler<long, Domain.Team, PutTeamCommand>
     {
         public PutTeamHandler(IEntityRepository<Domain.Team, long> repository)
             : base(repository)
         {
         }
 
-        protected override async Task BindToDomainEntityAndValidate(Domain.Team domainEntity, PutTeamRequest request, CancellationToken cancellationToken)
+        protected override async Task BindToDomainEntityAndValidate(Domain.Team domainEntity, PutTeamCommand request, CancellationToken cancellationToken)
         {
             if (domainEntity == null) throw new ArgumentNullException(nameof(domainEntity));
             if (request == null) throw new ArgumentNullException(nameof(request));

@@ -4,10 +4,10 @@ using MediatR;
 namespace RequestManagement
 {
     /// <summary>
-    /// Delete Request Interface
+    /// Delete Command Interface
     /// </summary>
     /// <typeparam name="TId">Entity ID type</typeparam>
-    public interface IDeleteRequest<TId> : IRequest<OperationResult>
+    public interface IDeleteCommand<TId> : IRequest<CommandResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
     {
         /// <summary>

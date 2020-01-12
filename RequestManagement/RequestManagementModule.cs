@@ -47,7 +47,7 @@ namespace RequestManagement
 
             var assemblies = new List<Assembly>();
             assemblies.AddRange(this.MediatrAssemblies);
-            assemblies.Add(typeof(OperationResult).Assembly);
+            assemblies.Add(typeof(CommandResult).Assembly);
 
             foreach (var assembly in assemblies)
             {

@@ -11,14 +11,14 @@ using SampleApiWebApp.Data.Queries;
 
 namespace SampleApiWebApp.Controllers.Teams.Post
 {
-    public sealed class PostTeamHandler : PostRequestHandler<long, Domain.Team, Team, PostTeamRequest>
+    public sealed class PostTeamHandler : PostCommandHandler<long, Domain.Team, Team, PostTeamCommand>
     {
         public PostTeamHandler(IEntityRepository<Domain.Team, long> repository)
             : base(repository)
         {
         }
 
-        protected override async Task<Domain.Team> GenerateAndValidateDomainEntity(PostTeamRequest request, CancellationToken cancellationToken)
+        protected override async Task<Domain.Team> GenerateAndValidateDomainEntity(PostTeamCommand request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
