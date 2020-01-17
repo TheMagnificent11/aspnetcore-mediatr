@@ -1,6 +1,6 @@
 ﻿using System;
 using AutoMapper;
-using EntityManagement.Core;
+using EntityManagement;
 using RequestManagement;
 
 namespace SampleApiWebApp.Controllers.Teams.GetOne
