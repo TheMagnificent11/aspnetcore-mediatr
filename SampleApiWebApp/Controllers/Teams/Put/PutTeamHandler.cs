@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement.Core;
+using EntityManagement;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 using RequestManagement;
 using SampleApiWebApp.Data.Queries;
 
@@ -23,7 +24,9 @@ namespace SampleApiWebApp.Controllers.Teams.Put
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var query = new GetTeamsByName(request.Name);
-            var teamsWithSameName = await this.Repository.Query(query, cancellationToken);
+            var teamsWithSameName = await this.Repository
+                .Query(query)
+                .ToListAsync(cancellationToken);
 
             if (teamsWithSameName.Any(i => i.Id != domainEntity.Id))
             {

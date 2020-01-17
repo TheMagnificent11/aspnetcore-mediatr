@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
-    <PackageReference Include="EntityManagement" Version="3.1.1" />
+    <PackageReference Include="EntityManagement" Version="3.2.0" />
     <PackageReference Include="FluentValidation" Version="8.6.1" />
     <PackageReference Include="FluentValidationExtensions" Version="0.0.4" />
     <PackageReference Include="MediatR" Version="8.0.0" />

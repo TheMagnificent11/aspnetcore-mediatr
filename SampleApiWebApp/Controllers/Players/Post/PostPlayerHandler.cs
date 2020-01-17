@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement.Core;
+using EntityManagement;
 using RequestManagement;
 
 namespace SampleApiWebApp.Controllers.Players.Post
