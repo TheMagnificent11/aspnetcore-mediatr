@@ -11,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RequestManagement;
+using RequestManagement.Logging;
 using SampleApiWebApp.Configuration;
 using SampleApiWebApp.Data;
+using Serilog.Events;
 
 namespace SampleApiWebApp
 {
@@ -70,6 +72,11 @@ namespace SampleApiWebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettings = this.GetSettings<ApplicationSettings>("ApplicationSettings");
+            var seqSettings = this.GetSettings<SeqSettings>("SeqSettings");
+
+            services.ConfigureLogging(this.Configuration, LogEventLevel.Debug, appSettings, seqSettings);
+
             services.AddDbContextPool<DatabaseContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -89,6 +96,16 @@ namespace SampleApiWebApp
                 var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
                 context.Database.Migrate();
             }
+        }
+
+        private T GetSettings<T>(string configurationSection)
+            where T : class, new()
+        {
+            var settings = new T();
+
+            this.Configuration.Bind(configurationSection, settings);
+
+            return settings;
         }
     }
 }
