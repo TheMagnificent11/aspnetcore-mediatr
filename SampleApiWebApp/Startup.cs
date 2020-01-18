@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Autofac;
 using Autofac.Features.Variance;
+using AutofacSerilogIntegration;
 using AutoMapper;
 using EntityManagement;
 using Microsoft.AspNetCore.Builder;
@@ -64,6 +65,8 @@ namespace SampleApiWebApp
 
         public static void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterLogger();
+
             builder.RegisterSource(new ContravariantRegistrationSource());
 
             builder.RegisterModule(new EntityManagementModule<DatabaseContext>());
@@ -78,7 +81,12 @@ namespace SampleApiWebApp
             services.ConfigureLogging(this.Configuration, LogEventLevel.Debug, appSettings, seqSettings);
 
             services.AddDbContextPool<DatabaseContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
+
+                // TODO
+                ////options.UseLoggerFactory()
+            });
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
