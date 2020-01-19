@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using EntityManagement;
 using EntityManagement.Core;
 using MediatR;
+using RequestManagement.Logging;
+using Serilog;
+using Serilog.Context;
 
 namespace RequestManagement
 {
@@ -16,6 +19,7 @@ namespace RequestManagement
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
     public abstract class GetAllQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity>,
         IRequestHandler<TRequest, CommandResult<IEnumerable<TResponseEntity>>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
@@ -26,15 +30,11 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="GetAllQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected GetAllQueryHandler(IEntityRepository<TEntity, TId> repository)
+        /// <param name="logger">Logger</param>
+        protected GetAllQueryHandler(IEntityRepository<TEntity, TId> repository, ILogger logger)
+            : base(repository, logger)
         {
-            this.Repository = repository;
         }
-
-        /// <summary>
-        /// Gets entity repository
-        /// </summary>
-        protected IEntityRepository<TEntity, TId> Repository { get; }
 
         /// <summary>
         /// Handlers get all request
@@ -46,10 +46,16 @@ namespace RequestManagement
             TRequest request,
             CancellationToken cancellationToken)
         {
-            var domainEntities = await this.Repository.RetrieveAll(cancellationToken);
-            var responseEntities = this.MapEntities(domainEntities);
+            var logger = this.GetLoggerForContext();
 
-            return CommandResult.Success<IEnumerable<TResponseEntity>>(responseEntities);
+            using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
+            using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
+            {
+                var domainEntities = await this.Repository.RetrieveAll(cancellationToken);
+                var responseEntities = this.MapEntities(domainEntities);
+
+                return CommandResult.Success<IEnumerable<TResponseEntity>>(responseEntities);
+            }
         }
 
         /// <summary>

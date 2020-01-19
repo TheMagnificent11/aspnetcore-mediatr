@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
 using EntityManagement.Core;
 using FluentValidation;
 using MediatR;
+using RequestManagement.Logging;
+using Serilog;
+using Serilog.Context;
 
 namespace RequestManagement
 {
@@ -16,6 +20,7 @@ namespace RequestManagement
     /// <typeparam name="TRequestEntity">Request entity type</typeparam>
     /// <typeparam name="TRequest">Post request type</typeparam>
     public abstract class PostCommandHandler<TId, TEntity, TRequestEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity>,
         IRequestHandler<TRequest, CommandResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
@@ -26,15 +31,11 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="PostCommandHandler{TId, TEntity, TRequestEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected PostCommandHandler(IEntityRepository<TEntity, TId> repository)
+        /// <param name="logger">Logger</param>
+        protected PostCommandHandler(IEntityRepository<TEntity, TId> repository, ILogger logger)
+            : base(repository, logger)
         {
-            this.Repository = repository;
         }
-
-        /// <summary>
-        /// Gets the entity repository
-        /// </summary>
-        protected IEntityRepository<TEntity, TId> Repository { get; }
 
         /// <summary>
         /// Handles post requests
@@ -49,17 +50,24 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            try
-            {
-                var entity = await this.GenerateAndValidateDomainEntity(request, cancellationToken);
+            var logger = this.GetLoggerForContext();
 
-                await this.Repository.Create(entity, cancellationToken);
-
-                return CommandResult.Success(entity.Id);
-            }
-            catch (ValidationException ex)
+            using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
+            using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
-                return CommandResult.Fail<TId>(ex.Errors);
+                try
+                {
+                    var entity = await this.GenerateAndValidateDomainEntity(request, logger, cancellationToken);
+
+                    await this.Repository.Create(entity, cancellationToken);
+
+                    return CommandResult.Success(entity.Id);
+                }
+                catch (ValidationException ex)
+                {
+                    logger.Information(ex, "Validation failed");
+                    return CommandResult.Fail<TId>(ex.Errors);
+                }
             }
         }
 
@@ -67,9 +75,13 @@ namespace RequestManagement
         /// Generate a domain entity from create entity request
         /// </summary>
         /// <param name="request">Create entity request</param>
+        /// <param name="logger">Logger</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>Entity to be created</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
-        protected abstract Task<TEntity> GenerateAndValidateDomainEntity(TRequest request, CancellationToken cancellationToken);
+        protected abstract Task<TEntity> GenerateAndValidateDomainEntity(
+            [NotNull] TRequest request,
+            [NotNull] ILogger logger,
+            [NotNull] CancellationToken cancellationToken);
     }
 }
