@@ -8,13 +8,14 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using RequestManagement;
 using SampleApiWebApp.Data.Queries;
+using Serilog;
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
     public sealed class PutTeamHandler : PutCommandHandler<long, Domain.Team, PutTeamCommand>
     {
-        public PutTeamHandler(IEntityRepository<Domain.Team, long> repository)
-            : base(repository)
+        public PutTeamHandler(IEntityRepository<Domain.Team, long> repository, ILogger logger)
+            : base(repository, logger)
         {
         }
 

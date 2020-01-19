@@ -35,14 +35,18 @@ namespace RequestManagement
 
         private Type HandlerType { get; }
 
-        internal ILogger GetLoggerForContext()
-        {
-            return this.Logger.ForContext(this.HandlerType);
-        }
-
         internal string GetLoggerTimedOperationName()
         {
             return $"{this.HandlerType.Name}.Handle";
+        }
+
+        /// <summary>
+        /// Gets a logger in the context of this handler
+        /// </summary>
+        /// <returns>A logger</returns>
+        protected ILogger GetLoggerForContext()
+        {
+            return this.Logger.ForContext(this.HandlerType);
         }
     }
 }

@@ -3,13 +3,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
 using RequestManagement;
+using Serilog;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
     public sealed class PostPlayerHandler : PostCommandHandler<long, Domain.Player, Player, PostPlayerCommand>
     {
-        public PostPlayerHandler(IEntityRepository<Domain.Player, long> repository)
-            : base(repository)
+        public PostPlayerHandler(IEntityRepository<Domain.Player, long> repository, ILogger logger)
+            : base(repository, logger)
         {
         }
 

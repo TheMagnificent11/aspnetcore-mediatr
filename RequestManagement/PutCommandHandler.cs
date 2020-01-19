@@ -5,6 +5,7 @@ using EntityManagement;
 using EntityManagement.Core;
 using FluentValidation;
 using MediatR;
+using Serilog;
 
 namespace RequestManagement
 {
@@ -14,7 +15,9 @@ namespace RequestManagement
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TRequest">Put request type</typeparam>
-    public abstract class PutCommandHandler<TId, TEntity, TRequest> : IRequestHandler<TRequest, CommandResult>
+    public abstract class PutCommandHandler<TId, TEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity>,
+        IRequestHandler<TRequest, CommandResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequest : class, IPutCommand<TId>
@@ -23,15 +26,11 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="PutCommandHandler{TId, TEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected PutCommandHandler(IEntityRepository<TEntity, TId> repository)
+        /// <param name="logger">Logger</param>
+        protected PutCommandHandler(IEntityRepository<TEntity, TId> repository, ILogger logger)
+            : base(repository, logger)
         {
-            this.Repository = repository;
         }
-
-        /// <summary>
-        /// Gets the entity repository
-        /// </summary>
-        protected IEntityRepository<TEntity, TId> Repository { get; }
 
         /// <summary>
         /// Handles the put request
