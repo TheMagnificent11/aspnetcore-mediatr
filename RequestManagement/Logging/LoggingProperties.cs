@@ -1,4 +1,4 @@
-﻿namespace RequestManagement
+﻿namespace RequestManagement.Logging
 {
     internal static class LoggingProperties
     {

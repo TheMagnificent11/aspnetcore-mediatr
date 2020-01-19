@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EntityManagement;
 using EntityManagement.Core;
 using MediatR;
+using RequestManagement.Logging;
 using Serilog;
 using Serilog.Context;
 
