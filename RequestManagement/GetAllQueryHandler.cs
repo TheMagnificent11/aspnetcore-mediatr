@@ -48,7 +48,7 @@ namespace RequestManagement
         {
             var logger = this.GetLoggerForContext();
 
-            using (LogContext.PushProperty(LoggingProperties.EntityType, nameof(TEntity)))
+            using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
                 var domainEntities = await this.Repository.RetrieveAll(cancellationToken);

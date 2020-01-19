@@ -52,7 +52,7 @@ namespace RequestManagement
 
             var logger = this.GetLoggerForContext();
 
-            using (LogContext.PushProperty(LoggingProperties.EntityType, nameof(TEntity)))
+            using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))
             using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
