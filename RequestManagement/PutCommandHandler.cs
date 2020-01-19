@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
 using EntityManagement.Core;
 using FluentValidation;
 using MediatR;
+using RequestManagement.Logging;
 using Serilog;
+using Serilog.Context;
 
 namespace RequestManagement
 {
@@ -42,21 +45,29 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
-            if (domainEntity == null) return CommandResult.NotFound();
+            var logger = this.GetLoggerForContext();
 
-            try
+            using (LogContext.PushProperty(LoggingProperties.EntityType, nameof(TEntity)))
+            using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))
+            using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
-                await this.BindToDomainEntityAndValidate(domainEntity, request, cancellationToken);
+                var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
+                if (domainEntity == null) return CommandResult.NotFound();
 
-                await this.Repository.Update(domainEntity, cancellationToken);
-            }
-            catch (ValidationException ex)
-            {
-                return CommandResult.Fail(ex.Errors);
-            }
+                try
+                {
+                    await this.BindToDomainEntityAndValidate(domainEntity, request, logger, cancellationToken);
 
-            return CommandResult.Success();
+                    await this.Repository.Update(domainEntity, cancellationToken);
+                }
+                catch (ValidationException ex)
+                {
+                    logger.Information(ex, "Validation failed");
+                    return CommandResult.Fail(ex.Errors);
+                }
+
+                return CommandResult.Success();
+            }
         }
 
         /// <summary>
@@ -64,12 +75,14 @@ namespace RequestManagement
         /// </summary>
         /// <param name="domainEntity">Domain entity read from the database to be updated</param>
         /// <param name="request">Create entity request</param>
+        /// <param name="logger">Logger</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Asynchronous task</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
         protected abstract Task BindToDomainEntityAndValidate(
-            TEntity domainEntity,
-            TRequest request,
-            CancellationToken cancellationToken);
+            [NotNull] TEntity domainEntity,
+            [NotNull] TRequest request,
+            [NotNull] ILogger logger,
+            [NotNull] CancellationToken cancellationToken);
     }
 }

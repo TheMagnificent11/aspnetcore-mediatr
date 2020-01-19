@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,10 @@ namespace SampleApiWebApp.Controllers.Teams.Post
         {
         }
 
-        protected override async Task<Domain.Team> GenerateAndValidateDomainEntity(PostTeamCommand request, CancellationToken cancellationToken)
+        protected override async Task<Domain.Team> GenerateAndValidateDomainEntity(
+            [NotNull] PostTeamCommand request,
+            [NotNull] ILogger logger,
+            [NotNull] CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -33,6 +37,9 @@ namespace SampleApiWebApp.Controllers.Teams.Post
             if (teamsWithSameName.Any())
             {
                 var error = new ValidationFailure(nameof(request.Name), string.Format(Domain.Team.ErrorMessages.NameNotUniqueFormat, teamName));
+#pragma warning disable CA1062 // Validate arguments of public methods
+                logger.Information("Validation failed: a Team with the name {TeamName} already exists", request.Name);
+#pragma warning restore CA1062 // Validate arguments of public methods
                 throw new ValidationException(new ValidationFailure[] { error });
             }
 

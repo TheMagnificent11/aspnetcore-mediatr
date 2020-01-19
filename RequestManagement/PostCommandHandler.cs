@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
@@ -56,7 +57,7 @@ namespace RequestManagement
             {
                 try
                 {
-                    var entity = await this.GenerateAndValidateDomainEntity(request, cancellationToken);
+                    var entity = await this.GenerateAndValidateDomainEntity(request, logger, cancellationToken);
 
                     await this.Repository.Create(entity, cancellationToken);
 
@@ -74,9 +75,13 @@ namespace RequestManagement
         /// Generate a domain entity from create entity request
         /// </summary>
         /// <param name="request">Create entity request</param>
+        /// <param name="logger">Logger</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>Entity to be created</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
-        protected abstract Task<TEntity> GenerateAndValidateDomainEntity(TRequest request, CancellationToken cancellationToken);
+        protected abstract Task<TEntity> GenerateAndValidateDomainEntity(
+            [NotNull] TRequest request,
+            [NotNull] ILogger logger,
+            [NotNull] CancellationToken cancellationToken);
     }
 }

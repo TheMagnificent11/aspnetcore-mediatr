@@ -14,7 +14,10 @@ namespace SampleApiWebApp.Controllers.Players.Post
         {
         }
 
-        protected override Task<Domain.Player> GenerateAndValidateDomainEntity(PostPlayerCommand request, CancellationToken cancellationToken)
+        protected override Task<Domain.Player> GenerateAndValidateDomainEntity(
+            PostPlayerCommand request,
+            ILogger logger,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
