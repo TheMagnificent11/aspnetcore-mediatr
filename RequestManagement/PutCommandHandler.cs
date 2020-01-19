@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
 using EntityManagement.Core;
 using FluentValidation;
 using MediatR;
+using RequestManagement.Logging;
+using Serilog;
+using Serilog.Context;
 
 namespace RequestManagement
 {
@@ -14,7 +18,9 @@ namespace RequestManagement
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TRequest">Put request type</typeparam>
-    public abstract class PutCommandHandler<TId, TEntity, TRequest> : IRequestHandler<TRequest, CommandResult>
+    public abstract class PutCommandHandler<TId, TEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity>,
+        IRequestHandler<TRequest, CommandResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequest : class, IPutCommand<TId>
@@ -23,15 +29,11 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="PutCommandHandler{TId, TEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected PutCommandHandler(IEntityRepository<TEntity, TId> repository)
+        /// <param name="logger">Logger</param>
+        protected PutCommandHandler(IEntityRepository<TEntity, TId> repository, ILogger logger)
+            : base(repository, logger)
         {
-            this.Repository = repository;
         }
-
-        /// <summary>
-        /// Gets the entity repository
-        /// </summary>
-        protected IEntityRepository<TEntity, TId> Repository { get; }
 
         /// <summary>
         /// Handles the put request
@@ -43,21 +45,29 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
-            if (domainEntity == null) return CommandResult.NotFound();
+            var logger = this.GetLoggerForContext();
 
-            try
+            using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
+            using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))
+            using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
-                await this.BindToDomainEntityAndValidate(domainEntity, request, cancellationToken);
+                var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
+                if (domainEntity == null) return CommandResult.NotFound();
 
-                await this.Repository.Update(domainEntity, cancellationToken);
-            }
-            catch (ValidationException ex)
-            {
-                return CommandResult.Fail(ex.Errors);
-            }
+                try
+                {
+                    await this.BindToDomainEntityAndValidate(domainEntity, request, logger, cancellationToken);
 
-            return CommandResult.Success();
+                    await this.Repository.Update(domainEntity, cancellationToken);
+                }
+                catch (ValidationException ex)
+                {
+                    logger.Information(ex, "Validation failed");
+                    return CommandResult.Fail(ex.Errors);
+                }
+
+                return CommandResult.Success();
+            }
         }
 
         /// <summary>
@@ -65,12 +75,14 @@ namespace RequestManagement
         /// </summary>
         /// <param name="domainEntity">Domain entity read from the database to be updated</param>
         /// <param name="request">Create entity request</param>
+        /// <param name="logger">Logger</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Asynchronous task</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
         protected abstract Task BindToDomainEntityAndValidate(
-            TEntity domainEntity,
-            TRequest request,
-            CancellationToken cancellationToken);
+            [NotNull] TEntity domainEntity,
+            [NotNull] TRequest request,
+            [NotNull] ILogger logger,
+            [NotNull] CancellationToken cancellationToken);
     }
 }

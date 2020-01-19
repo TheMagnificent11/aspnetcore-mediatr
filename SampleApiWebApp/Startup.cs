@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Autofac;
 using Autofac.Features.Variance;
+using AutofacSerilogIntegration;
 using AutoMapper;
 using EntityManagement;
 using Microsoft.AspNetCore.Builder;
@@ -11,8 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RequestManagement;
+using RequestManagement.Logging;
 using SampleApiWebApp.Configuration;
 using SampleApiWebApp.Data;
+using Serilog.Events;
 
 namespace SampleApiWebApp
 {
@@ -62,6 +65,8 @@ namespace SampleApiWebApp
 
         public static void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterLogger();
+
             builder.RegisterSource(new ContravariantRegistrationSource());
 
             builder.RegisterModule(new EntityManagementModule<DatabaseContext>());
@@ -70,8 +75,18 @@ namespace SampleApiWebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettings = this.GetSettings<ApplicationSettings>("ApplicationSettings");
+            var seqSettings = this.GetSettings<SeqSettings>("SeqSettings");
+
+            services.ConfigureLogging(this.Configuration, LogEventLevel.Debug, appSettings, seqSettings);
+
             services.AddDbContextPool<DatabaseContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
+
+                // TODO
+                ////options.UseLoggerFactory()
+            });
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
@@ -89,6 +104,16 @@ namespace SampleApiWebApp
                 var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
                 context.Database.Migrate();
             }
+        }
+
+        private T GetSettings<T>(string configurationSection)
+            where T : class, new()
+        {
+            var settings = new T();
+
+            this.Configuration.Bind(configurationSection, settings);
+
+            return settings;
         }
     }
 }

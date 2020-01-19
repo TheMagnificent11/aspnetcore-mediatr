@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using EntityManagement;
 using EntityManagement.Core;
 using MediatR;
+using RequestManagement.Logging;
+using Serilog;
+using Serilog.Context;
 
 namespace RequestManagement
 {
@@ -15,6 +18,7 @@ namespace RequestManagement
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
     public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity>,
         IRequestHandler<TRequest, CommandResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
@@ -25,15 +29,11 @@ namespace RequestManagement
         /// Initializes a new instance of the <see cref="GetOneQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="repository">Entity repository</param>
-        protected GetOneQueryHandler(IEntityRepository<TEntity, TId> repository)
+        /// <param name="logger">Logger</param>
+        protected GetOneQueryHandler(IEntityRepository<TEntity, TId> repository, ILogger logger)
+            : base(repository, logger)
         {
-            this.Repository = repository;
         }
-
-        /// <summary>
-        /// Gets the entity repository
-        /// </summary>
-        protected IEntityRepository<TEntity, TId> Repository { get; }
 
         /// <summary>
         /// Handles get one entity requests
@@ -50,12 +50,19 @@ namespace RequestManagement
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var entity = await this.Repository.RetrieveById(request.Id, cancellationToken);
-            if (entity == null) return CommandResult.NotFound<TResponseEntity>();
+            var logger = this.GetLoggerForContext();
 
-            var result = this.MapEntity(entity);
+            using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
+            using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))
+            using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
+            {
+                var entity = await this.Repository.RetrieveById(request.Id, cancellationToken);
+                if (entity == null) return CommandResult.NotFound<TResponseEntity>();
 
-            return CommandResult.Success(result);
+                var result = this.MapEntity(entity);
+
+                return CommandResult.Success(result);
+            }
         }
 
         /// <summary>
