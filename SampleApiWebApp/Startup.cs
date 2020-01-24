@@ -81,12 +81,7 @@ namespace SampleApiWebApp
             services.ConfigureLogging(this.Configuration, LogEventLevel.Debug, appSettings, seqSettings);
 
             services.AddDbContextPool<DatabaseContext>(options =>
-            {
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
-
-                // TODO
-                ////options.UseLoggerFactory()
-            });
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
