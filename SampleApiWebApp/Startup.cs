@@ -55,7 +55,7 @@ namespace SampleApiWebApp
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/health", Health);
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
 
