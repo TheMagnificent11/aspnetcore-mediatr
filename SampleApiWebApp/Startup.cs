@@ -55,6 +55,7 @@ namespace SampleApiWebApp
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health", Health);
                 endpoints.MapControllers();
             });
 
@@ -89,6 +90,8 @@ namespace SampleApiWebApp
 
             services.ConfigureProblemDetails();
 
+            ConfigureHealthChecks(services.AddHealthChecks());
+
             services.ConfigureSwagger(ApiVersion, ApiName);
         }
 
@@ -99,6 +102,11 @@ namespace SampleApiWebApp
                 var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
                 context.Database.Migrate();
             }
+        }
+
+        private static void ConfigureHealthChecks(IHealthChecksBuilder builder)
+        {
+            builder.AddCheck<DatabaseHealthCheck<DatabaseContext>>(nameof(DatabaseContext));
         }
 
         private T GetSettings<T>(string configurationSection)
