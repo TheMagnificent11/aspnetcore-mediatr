@@ -19,7 +19,7 @@ namespace RequestManagement
     /// <typeparam name="TRequest">Request type</typeparam>
     public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
         BaseRequestHandler<TId, TEntity>,
-        IRequestHandler<TRequest, CommandResult<TResponseEntity>>
+        IRequestHandler<TRequest, OperationResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
@@ -44,7 +44,7 @@ namespace RequestManagement
         /// Operation result containing the response entity as the data if successful,
         /// otherwise not found operation result
         /// </returns>
-        public async Task<CommandResult<TResponseEntity>> Handle(
+        public async Task<OperationResult<TResponseEntity>> Handle(
             TRequest request,
             CancellationToken cancellationToken)
         {
@@ -57,11 +57,11 @@ namespace RequestManagement
             using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
                 var entity = await this.Repository.RetrieveById(request.Id, cancellationToken);
-                if (entity == null) return CommandResult.NotFound<TResponseEntity>();
+                if (entity == null) return OperationResult.NotFound<TResponseEntity>();
 
                 var result = this.MapEntity(entity);
 
-                return CommandResult.Success(result);
+                return OperationResult.Success(result);
             }
         }
 

@@ -20,7 +20,7 @@ namespace RequestManagement
     /// <typeparam name="TRequest">Put request type</typeparam>
     public abstract class PutCommandHandler<TId, TEntity, TRequest> :
         BaseRequestHandler<TId, TEntity>,
-        IRequestHandler<TRequest, CommandResult>
+        IRequestHandler<TRequest, OperationResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequest : class, IPutCommand<TId>
@@ -40,8 +40,8 @@ namespace RequestManagement
         /// </summary>
         /// <param name="request">Put request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>An <see cref="CommandResult"/> that reports success and any validation errors it was a bad request</returns>
-        public async Task<CommandResult> Handle(TRequest request, CancellationToken cancellationToken)
+        /// <returns>An <see cref="OperationResult"/> that reports success and any validation errors it was a bad request</returns>
+        public async Task<OperationResult> Handle(TRequest request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -52,7 +52,7 @@ namespace RequestManagement
             using (logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
             {
                 var domainEntity = await this.Repository.RetrieveById(request.Id, cancellationToken);
-                if (domainEntity == null) return CommandResult.NotFound();
+                if (domainEntity == null) return OperationResult.NotFound();
 
                 try
                 {
@@ -63,10 +63,10 @@ namespace RequestManagement
                 catch (ValidationException ex)
                 {
                     logger.Information(ex, "Validation failed");
-                    return CommandResult.Fail(ex.Errors);
+                    return OperationResult.Fail(ex.Errors);
                 }
 
-                return CommandResult.Success();
+                return OperationResult.Success();
             }
         }
 

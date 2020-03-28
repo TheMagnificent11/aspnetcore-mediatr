@@ -21,7 +21,7 @@ namespace RequestManagement
     /// <typeparam name="TRequest">Post request type</typeparam>
     public abstract class PostCommandHandler<TId, TEntity, TRequestEntity, TRequest> :
         BaseRequestHandler<TId, TEntity>,
-        IRequestHandler<TRequest, CommandResult<TId>>
+        IRequestHandler<TRequest, OperationResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequestEntity : class
@@ -43,10 +43,10 @@ namespace RequestManagement
         /// <param name="request">Post request</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>
-        /// An <see cref="CommandResult{T}"/> containing the ID of the created entity if successful,
+        /// An <see cref="OperationResult{T}"/> containing the ID of the created entity if successful,
         /// otherwise bad request operation result containing errors collection
         /// </returns>
-        public async Task<CommandResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<OperationResult<TId>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -61,12 +61,12 @@ namespace RequestManagement
 
                     await this.Repository.Create(entity, cancellationToken);
 
-                    return CommandResult.Success(entity.Id);
+                    return OperationResult.Success(entity.Id);
                 }
                 catch (ValidationException ex)
                 {
                     logger.Information(ex, "Validation failed");
-                    return CommandResult.Fail<TId>(ex.Errors);
+                    return OperationResult.Fail<TId>(ex.Errors);
                 }
             }
         }
