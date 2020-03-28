@@ -40,7 +40,7 @@ namespace RequestManagement
                 .ToList()
                 .GetErrors();
 
-            var operationResult = CommandResult.Fail(errors);
+            var operationResult = OperationResult.Fail(errors);
 
             return new BadRequestObjectResult(operationResult.ToProblemDetails());
         }

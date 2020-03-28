@@ -7,7 +7,7 @@ namespace RequestManagement
     /// Put Command Interface
     /// </summary>
     /// <typeparam name="TId">Entity ID type</typeparam>
-    public interface IPutCommand<TId> : IRequest<CommandResult>
+    public interface IPutCommand<TId> : IRequest<OperationResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
     {
         /// <summary>

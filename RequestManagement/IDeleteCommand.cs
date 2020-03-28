@@ -7,7 +7,7 @@ namespace RequestManagement
     /// Delete Command Interface
     /// </summary>
     /// <typeparam name="TId">Entity ID type</typeparam>
-    public interface IDeleteCommand<TId> : IRequest<CommandResult>
+    public interface IDeleteCommand<TId> : IRequest<OperationResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
     {
         /// <summary>
