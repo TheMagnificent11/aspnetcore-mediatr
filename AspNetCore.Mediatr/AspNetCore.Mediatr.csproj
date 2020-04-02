@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageProjectUrl>https://github.com/TheMagnificent11/request-management</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/TheMagnificent11/request-management.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/TheMagnificent11/aspnetcore-mediatr</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TheMagnificent11/aspnetcore-mediatr.git</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Authors>Saji Weerasingham</Authors>
     <Company>NA</Company>
-    <Product>RequestManagement</Product>
+    <Product>AspNetCore.Mediatr</Product>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
