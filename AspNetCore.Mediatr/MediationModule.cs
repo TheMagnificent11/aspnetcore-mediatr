@@ -5,18 +5,18 @@ using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 
-namespace RequestManagement
+namespace AspNetCore.Mediatr
 {
     /// <summary>
     /// Request Management Autofac Module
     /// </summary>
-    public class RequestManagementModule : Autofac.Module
+    public class MediationModule : Autofac.Module
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RequestManagementModule"/> class
+        /// Initializes a new instance of the <see cref="MediationModule"/> class
         /// </summary>
         /// <param name="mediatrAssemblies">Mediatr assemblies</param>
-        public RequestManagementModule(IEnumerable<Assembly> mediatrAssemblies)
+        public MediationModule(IEnumerable<Assembly> mediatrAssemblies)
         {
             this.MediatrAssemblies = mediatrAssemblies;
         }

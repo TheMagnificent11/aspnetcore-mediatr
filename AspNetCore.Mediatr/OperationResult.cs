@@ -4,7 +4,7 @@ using System.Net;
 using FluentValidation.Extensions;
 using FluentValidation.Results;
 
-namespace RequestManagement
+namespace AspNetCore.Mediatr
 {
     /// <summary>
     /// Command Result
