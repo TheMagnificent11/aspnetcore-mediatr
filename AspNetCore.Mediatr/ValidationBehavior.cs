@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 
-namespace RequestManagement
+namespace AspNetCore.Mediatr
 {
     /// <summary>
     /// Validation Behaviour

@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 
-namespace RequestManagement
+namespace AspNetCore.Mediatr
 {
     /// <summary>
     /// Request Management Autofac Module

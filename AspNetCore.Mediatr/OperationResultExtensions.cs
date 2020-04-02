@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RequestManagement
+namespace AspNetCore.Mediatr
 {
     /// <summary>
     /// Operation Result Extension Methods
