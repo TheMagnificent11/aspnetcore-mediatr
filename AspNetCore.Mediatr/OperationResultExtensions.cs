@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace RequestManagement
 {
     /// <summary>
-    /// Command Result Extension Methods
+    /// Operation Result Extension Methods
     /// </summary>
-    public static class CommandResultExtensions
+    public static class OperationResultExtensions
     {
         /// <summary>
         /// Converts to a <see cref="ValidationProblemDetails"/> object
@@ -17,7 +17,10 @@ namespace RequestManagement
         /// <returns>Validation problem details</returns>
         public static ValidationProblemDetails ToProblemDetails(this OperationResult result)
         {
-            if (result == null) throw new ArgumentNullException(nameof(result));
+            if (result is null)
+            {
+                throw new ArgumentNullException(nameof(result));
+            }
 
             var problemDetails = new ValidationProblemDetails()
             {
@@ -41,7 +44,10 @@ namespace RequestManagement
         /// <returns>Action result</returns>
         public static IActionResult ToActionResult(this OperationResult result)
         {
-            if (result == null) throw new ArgumentNullException(nameof(result));
+            if (result is null)
+            {
+                throw new ArgumentNullException(nameof(result));
+            }
 
             switch (result.Status)
             {
@@ -68,7 +74,10 @@ namespace RequestManagement
         /// <returns>Action result</returns>
         public static IActionResult ToActionResult<T>(this OperationResult<T> result)
         {
-            if (result == null) throw new ArgumentNullException(nameof(result));
+            if (result is null)
+            {
+                throw new ArgumentNullException(nameof(result));
+            }
 
             switch (result.Status)
             {

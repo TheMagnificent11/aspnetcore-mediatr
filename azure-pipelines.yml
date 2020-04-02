@@ -17,7 +17,7 @@ steps:
   displayName: Build
   inputs:
     command: 'build'
-    projects: 'RequestManagement.sln'
+    projects: 'AspNetCore.Mediatr.sln'
     arguments: '--configuration release'
 - task: BuildQualityChecks@6
   displayName: 'Build Quality Checks'
@@ -29,7 +29,7 @@ steps:
   displayName: Pack
   inputs:
     command: pack
-    packagesToPack: RequestManagement/RequestManagement.csproj
+    packagesToPack: AspNetCore.Mediatr/AspNetCore.Mediatr.csproj
     configuration: release
     versioningScheme: byBuildNumber
 - task: NuGetCommand@2

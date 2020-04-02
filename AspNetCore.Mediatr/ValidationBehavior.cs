@@ -39,7 +39,10 @@ namespace RequestManagement
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            if (next == null) throw new ArgumentNullException(nameof(next));
+            if (next is null)
+            {
+                throw new ArgumentNullException(nameof(next));
+            }
 
             var tasks = this.Validators.Select(v => v.ValidateAsync(request, cancellationToken));
             var results = await Task.WhenAll(tasks);
